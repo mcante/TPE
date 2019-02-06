@@ -1,0 +1,119 @@
+{% load static  %}
+
+<div class="nav_menu">
+  <nav>
+    <div class="nav toggle">
+      <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li class="">
+        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        {% if user.usuarios.imagen %}
+          <img src="{{ user.usuarios.imagen.url }}" alt="">{{ user.first_name }} {{ user.last_name }}
+        {% else %}
+          <img src="{% static 'img/user-default.png' %}" alt="">{{ user.first_name }} {{ user.last_name }}
+        {% endif %}
+
+          <span class=" fa fa-angle-down"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-usermenu pull-right">
+          <li><a href="{% url 'perfil_update' user.usuarios.id %}"> Perfil</a></li>
+          <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out pull-right"></i> Salir</a></li>
+        </ul>
+      </li>
+
+
+      
+      <!-- Alarmas de Notas -->
+      <li role="presentation" class="dropdown">
+        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-list"></i>
+          <span class="badge bg-green">{{ Notas.count }}</span>
+        </a>
+        
+        <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+          {% for nota in Notas %}
+          <li>
+            <a href="{% url 'nota_update' nota.id %}">
+              <span class="image"><img src="{% static 'img/post-it.gif' %}" height="35" width="35" /></span>
+              <span>
+                <span class="count blue">{{ nota.titulo }}</span>
+                <br>
+                
+                    {% if nota.get_dias is False %}
+                    <span class="time">Sin Recordatorio</span>
+                    {% else %}
+                      {% if nota.get_dias == 0 %}
+                        <span class="time count red">Días restantes: {{ nota.get_dias }}</span>
+                      {% else %}
+                        <span class="time count green">Días restantes: {{ nota.get_dias }}</span>
+                      {% endif %}
+                    {% endif %}
+                
+              </span>
+              <br>
+              <span class="message">
+                {{ nota.contenido }}
+              </span>
+            </a>
+          </li>
+          {% endfor %}
+
+          <li>
+            <div class="text-center">
+              <a href="{% url 'nota_seguimiento_list' %}">
+                <strong>Ver todo</strong>
+                <i class="fa fa-angle-right"></i>
+              </a>
+            </div>
+          </li>
+
+        </ul>
+      </li>
+      <!-- FIN - Alarmas de Notas -->
+
+
+      <!-- Alarmas de Mejoras -->
+      <li role="presentation" class="dropdown">
+          <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-stethoscope"></i>
+            <span class="badge bg-green">{{ Mejoras.count }}</span>
+          </a>
+          
+          <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+  
+            {% for mejora in Mejoras %}
+            <li>
+              <a href="{% url 'indicador_colaborador_update' mejora.id %}">
+                <span class="image"><i class="fa fa-stethoscope"></i></span>
+                <span>
+                  <span class="count blue">{{ mejora.indicador }} </span>
+                  <br>
+                  <span class="time">{{ mejora.calificacion }}</span>
+                </span>
+                <br>
+                <span class="message">
+                  {{ mejora.observaciones_encargado }}
+                </span>
+              </a>
+            </li>
+            {% endfor %}
+  
+            <li>
+              <div class="text-center">
+                <a href="{% url 'indicador_list' %}">
+                  <strong>Ver todo</strong>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+              </div>
+            </li>
+  
+          </ul>
+        </li>
+        <!-- FIN - Alarmas de Mejoras -->
+
+
+    </ul>
+  </nav>
+</div>

@@ -1,0 +1,200 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} NOTAS {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+
+  <!-- Datatables -->
+  <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <!-- top tiles -->
+
+    <!-- /top tiles -->
+    
+
+    
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2><a href="{% url 'categoria_list' %}"><i class="fa fa-reply"></i> Listar cuadernos </a></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <div class="box-body box-profile">
+                    
+                    <h3 class="profile-username text-center count red"><strong>Notas de {{ object.nombre }}</strong></h3>
+                    <h6 class="text-center">Fecha: {{ object.fecha }}</h6>
+                    <h6 class="text-center">Descripción: {{ object.descripcion }}</h6>
+                    <h6 class="text-center">Creado por: {{ object.creado_por.first_name }} {{ object.creado_por.last_name }}</h6>
+				</div>
+              </div>
+            </div>
+          </div>
+    
+    </div>
+
+
+
+
+
+
+
+<!-- FORMULARIO PARA AGREGAR UNA NUEVA NOTA A LA CATEGORÍA / ESTE FORMULARIO SE OCULTA -->
+<div class="row">
+    <div class="col-md-3 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><a class="collapse-link"> Agregar <img src="{% static 'img/post-it.gif' %}" class="img-fluid" height="35" width="35"></a><small>...</small></h2>
+                
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content" style="display: none;">
+                <br />
+                
+                <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+                <form action="{% url 'nota_add' %}" method="post">
+                    <table class="table nowrap" id="cualquiera">
+                        {% csrf_token %}
+                        {{nota_form.as_table}}	
+                    </table>
+                    <button type="submit" class="btn btn-round btn-primary">Agregar</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLA DE RESULTADOS -->
+    <div class="col-md-9 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="box-header with-border">
+                <h2>Detalle</h2> 
+            </div>
+            
+            <div id="collapse1" class="table-responsive">
+                <table class="table table-striped" id="dataTables">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Recordatorio</th>
+                            <th>Título</th>
+                            <th>Nota</th>
+                            <th>Pendiente</th>
+                            <th>Link</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if object %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
+                        
+                        {% for dtnota in object.rel_Nota_Categoria.all %}
+                        <tr>
+                            <td>{{ dtnota.fecha}}</td>
+                            <td>
+                                {% if dtnota.fecha_recordatorio %}
+                                    {{ dtnota.fecha_recordatorio }}</td>
+                                {% else %}
+                                    Sin Recordatorio
+                                {% endif %}
+                            <td>{{ dtnota.titulo }}</td>
+                            <td>{{ dtnota.contenido }}</td>
+                            <td>{% if dtnota.necesita_seguimiento %} Sí {% else %} No {% endif %}</td>
+                            <td>
+                                {% if dtnota.link %}
+                                    <a href="{{ dtnota.link }}">Ir a Link</a>
+                                {% else %}
+                                    Ninguno
+                                {% endif %}
+                            </td>
+                            
+                            <td>
+                                {% if dtnota.id %}
+                                <a class="btn btn-xs btn-primary" href="{% url 'nota_update' dtnota.id %}">Editar</a>
+                                <a class="btn btn-xs btn-danger" href="{% url 'nota_delete' dtnota.id %}">Eliminar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <h1>No hay registros de notas </h1>
+                        {% endif %} 
+                    </tbody>
+                    <tfoot>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                      </tfoot>
+                </table>
+            </div>
+        </div> 
+    </div>  
+  </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+<!-- Datatables -->
+  <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+  <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+
+
+<!-- DateJS -->
+<script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+<!-- Mis Scripts -->
+    <script src="{% static 'build/mis_scripts.js' %}"></script>  
+
+<script>
+  $(document).ready(function() {
+      
+    
+    init_datatables();
+    //init_select2();
+    init_datapicker();
+    init_Switchery();
+    //init_timepicker();
+
+  });
+</script>
+
+{% endblock javascripts %}

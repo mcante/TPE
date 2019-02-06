@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        IMPRIMIR EQUIPO ASIGNADO - {{object.area}}
+    </title>
+</head>
+<meta charset="utf-8" />
+
+
+
+<body>
+    
+    <div class="encabezado">
+        
+    </div>
+
+    <center>
+        <h1>ASIGNACIÓN DE EQUIPO</h1>
+    </center>
+    <br />
+    <br />
+
+    <center>
+        <div class="fecha">
+            <td>
+                Fecha de asignación Guatemala, {{object.fecha_asignacion}}
+            </td>
+        </div>
+    </center>
+    <!--Saludo y presentacion-->
+    <div class="presentacion">
+        <p>
+            <!--Datos del área-->
+            <h2> <strong>Área: </strong> {{object.area}}</h2>
+        </p>
+    </div>
+    
+    <center>
+        <p class="saludo">
+            <h2>Detalle del equipo</h2>
+    </center>
+    
+        
+    </p>
+    <center>
+        <table class="cuerpo" border="1">
+            <thead>
+                <tr>
+                    <th>Tipo Equipo</th>
+                    <th>Cantidad</th>
+                    <th>Identificador</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if object %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
+                {% for dtequipo in object.rel_AsignarEquipo_EquipoCargado.all %}
+                <tr>
+                    <td>{{ dtequipo.tipo_equipo }}</td>
+                    <td>{{ dtequipo.cantidad }}</td>
+                    <td>{{ dtequipo.identificador }}</td>
+                    <td>{{ dtequipo.descripcion }}</td>
+                    
+                </tr>
+                {% endfor %}
+                {% else %}
+                <h1>No hay registros de pedidos</h1>
+                {% endif %} 
+            </tbody>
+        </table>
+        
+
+
+    </center>
+    <strong>Nota: </strong> Declaro que me hago responsable del equipo que es asignado para uso exclusivo de mi área de trabajo.
+    
+    
+    
+    <p class="despedida">        
+            <div class="pie">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
+                <b>Técnico(s):</b> {% for tecnico in object.area.areas.all %} {{ tecnico.user.first_name }} {{ tecnico.user.last_name }} - {% endfor %} _______________________________________________
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                VoBo.____________________________
+                <br />
+                       <div class="vobo">Jefe Inmediato</div>
+                </p>
+        </div>
+    </div>
+    
+    
+    
+    
+    <!--INICIA EL CSS-->
+    <style type="text/css">
+        body{
+            font-size: 12px;
+            font-family: tahoma;
+        }
+        @page{
+            margin-top: 0mm;
+            margin-bottom: 0mm;
+            margin-left: 8mm;
+            margin-right: 10mm;
+        }
+        .encabezado{
+            margin-top: 50px;
+        }
+        .fecha{
+            
+            margin-top: -40px;
+        }
+        .presentacion{
+            margin-top: 40px;
+        }
+        .cuerpo tr:nth-child(odd) {
+            background-color:#9d9fae;
+        }
+        .cuerpo tr:nth-child(even) {
+            background-color:#aeafb5;
+        }
+        .saludo{
+            margin-left: 7mm;
+        }
+        .vobo{
+            margin-left: 20mm;
+        }
+        .despedida{
+            margin-left: 7mm;
+        }
+    </style>
+        <script>
+            window.onload= function () { window.print();window.close();}
+        </script>
+        
+        
+    </body>
+    </html>
+    
+    

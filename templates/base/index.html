@@ -1,0 +1,72 @@
+{% extends "base_site.html" %}
+{% load static  %}
+
+{% block title %} LIMPIO {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1>Título</h1>
+    <!-- /top tiles -->
+
+    
+    <br />
+
+    <div class="row">
+
+      <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320 overflow_hidden">
+          <div class="x_title">
+            <h2>Agregar Contenido</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis nisi, earum eius, eligendi quis sapiente tempore maxime necessitatibus iusto. Ipsa debitis autem magni numquam quisquam itaque veniam sunt facere dolorem?</p>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-4 col-sm-4 col-xs-12">
+      <!-- Aquí se puede agregar información -->
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-8 col-sm-8 col-xs-12">
+        <div class="row">
+          <!-- End to do list -->
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <!-- gauge.js -->
+  <script src="{% static 'vendors/gauge.js/dist/gauge.min.js' %}"></script>
+  <!-- Skycons -->
+  <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+  
+  <!-- DateJS -->
+  <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+{% endblock javascripts %}

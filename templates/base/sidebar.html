@@ -1,0 +1,93 @@
+{% load static  %}
+
+<div class="left_col scroll-view">
+  <div class="navbar nav_title" style="border: 0;">
+    <a href="{% url 'home' %}" class="site_title"><i class="fa fa-users"></i> <span>TPE</span></a>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <!-- menu profile quick info -->
+  <div class="profile clearfix">
+    <div class="profile_pic">
+
+        {% if user.usuarios.imagen %}
+          <img src="{{ user.usuarios.imagen.url }}" alt="..." class="img-circle profile_img">
+        {% else %}
+          <img src="{% static 'img/user-default.png' %}"alt="..." class="img-circle profile_img">
+        {% endif %}
+
+    </div>
+    <div class="profile_info">
+      <span>Bienvenido,</span>
+      <a href="{% url 'perfil_detail' user.usuarios.id %}"><h2>{{ user.first_name }} {{ user.last_name }}</h2></a>
+    </div>
+  </div>
+  <!-- /menu profile quick info -->
+
+  <br />
+
+  <!-- sidebar menu -->
+  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+      <h3>General</h3>
+      
+      <ul class="nav side-menu">
+        <li><a><i class="fa fa-home"></i> Principal <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'perfil_detail' user.usuarios.id %}">Mi Rendimiento</a></li>
+            <li><a href="{% url 'perfil_update' user.usuarios.id %}">Editar mi Perfil</a></li>
+            <li><a href="{% url 'evaluacion_list' %}">Mis Evaluaciones</a></li>
+            <li><a href="{% url 'faltas_list' %}">Mis Llamadas de Atención</a></li>
+            <li><a href="{% url 'indicador_list' %}">Seguimiento de mejoras</a></li>
+          </ul>
+        </li>
+
+        <li><a><i class="fa fa-calendar"></i> Apuntes <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'categoria_add' %}">Nuevo Cuaderno</a></li>
+            <li><a href="{% url 'categoria_list' %}">Cuadernos</a></li>
+            <li><a href="{% url 'nota_seguimiento_list' %}">Dar seguimiento a Notas</a></li>
+            <li><a href="{% url 'nota_list' %}"> Todas Mis Notas</a></li>
+          </ul>
+        </li>
+
+        {% if user.is_superuser %}
+          <li><a><i class="fa fa-cogs"></i> Supervisión <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'evaluacion_add' %}">Nueva Evaluación</a></li>
+              <li><a href="{% url 'evaluacion_list' %}">Listar Evaluaciones</a></li>
+              <li><a href="{% url 'faltas_add' %}">Nueva Falta</a></li>
+              <li><a href="{% url 'faltas_list' %}">Listar Faltas</a></li>
+              <li><a href="{% url 'indicador_full_list' %}">Lista de Indicadores</a></li>
+              <li><a href="{% url 'indicador_list' %}">Seguimiento de mejoras</a></li>
+              <li><a href="{% url 'version_add' %}">Crear Versión</a></li>
+              <li><a href="{% url 'version_list' %}">Listar Versiones</a></li>
+              <li><a href="{% url 'colaboradores_list' %}">Colaboradores</a></li>
+            </ul>
+          </li>
+        {% endif %}
+
+      </ul>
+      
+    </div>
+  </div>
+  <!-- /sidebar menu -->
+
+  <!-- /menu footer buttons -->
+  <div class="sidebar-footer hidden-small">
+    <a data-toggle="tooltip" data-placement="top" title="Perfil" href="{% url 'perfil_update' user.usuarios.id %}">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+      <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="Lock">
+      <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="Salir" href="{% url 'logout' %}">
+      <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+    </a>
+  </div>
+  <!-- /menu footer buttons -->
+</div>

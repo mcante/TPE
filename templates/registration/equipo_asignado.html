@@ -1,0 +1,209 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} ASIGNACIÓN {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+<!-- Datatables -->
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1>Equipo Asignado</h1>
+    <a class="btn btn-round btn-warning" href="{% url 'perfil_detail' user.usuarios.id %}"><i class="fa fa-reply"></i> Ver Perfil</a>
+    <!-- /top tiles -->
+    
+
+
+{# ASIGNACIÓN #}
+<div class="row">
+    <div class="col-md-6 col-sm-4 col-xs-12">
+        <div class="table-responsive">
+            <h2>Datos del Área</h2>
+            <div class="row">
+                <div class="col-sm-6">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Área:</strong></td>
+                                <td>
+                                    <a href="#">{{ object.area }}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Técnico(s):</strong></td>
+                                <td>
+                                    {% for tecnico in object.area.areas.all %} {{ tecnico.user.first_name }} {{ tecnico.user.last_name }} - {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fecha Asignación:</strong></td>
+                                <td>{{ object.fecha_asignacion }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Descripción:</strong></td>
+                                <td>{{ object.descripcion }}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+
+                                    {% if user.is_superuser %} 
+                                        <a class="btn btn-round btn-primary" href="#">Editar</a>
+                                    {% endif %}
+                                     
+                                    <a class="btn btn-round btn-info" href="{% url 'imprimir_equipo_asignado_detail' object.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.is_superuser %} 
+{# FORMULARIO PARA AGREGAR EQUIPO AL ÁREA / ESTE FORMULARIO SE OCULTA #}
+<div class="row">
+    <div class="col-md-6 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><a class="collapse-link"> Agregar <i class="fa fa-chevron-down"></i></a><small> equipo</small></h2>
+                
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content" style="display: none;">
+                <br />
+                
+                <div class="box-body  table-responsive">
+                <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+                <form action="{% url 'asignacionar_equipo_add' %}" method="post">
+                    <table class="display nowrap">
+
+                        {% csrf_token %}
+                        {{equipo_form.as_table}}	
+
+                    </table>
+                    <button type="submit" class="btn btn-round btn-primary">Agregar</button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+{# DETALLE DE LA ASIGNACIÓN #}
+<div class="row">
+    <div class="col-md-12 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="box-header with-border">
+                <h2>Detalle</h2> 
+            </div>
+            
+            <div id="collapse1" class="table-responsive">
+                <table width="100%" class="display nowrap table-striped table-hover" id="dataTables">
+                    <thead>
+                        <tr>
+                            <th>Tipo Equipo</th>
+                            <th>Cantidad</th>
+                            <th>Identificador</th>
+                            <th>Descripción</th>
+                            
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if object %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
+                        {% for dtasignado in object.rel_AsignarEquipo_EquipoCargado.all %}
+                        <tr>
+                            <td>{{ dtasignado.tipo_equipo }}</td>
+                            <td>{{ dtasignado.cantidad }}</td>
+                            <td>{{ dtasignado.identificador }}</td>
+                            <td>{{ dtasignado.descripcion }}</td>
+                            
+                            <td>
+                                {% if dtasignado.id %}
+                                <a class="btn btn-round btn-primary" href="{% url 'asignacionar_equipo_update' dtasignado.id %}">Editar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <h1>No hay registros de asignación de equipo</h1>
+                        {% endif %} 
+                    </tbody>
+                    <tfoot>
+                        <th><input type="text" placeholder="Tipo de Equipo"/></th>
+                        <th><input type="text" placeholder="Cantidad"/></th>
+                        <th><input type="text" placeholder="Identificador"/></th>
+                        <th><input type="text" placeholder="Descripción"/></th>
+                        <th><input type="text" placeholder="Acción"/></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div> 
+    </div>        
+</div>
+
+  </div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  
+  <!-- Skycons -->
+  <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+  <!-- DateJS -->
+  <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+  
+  <!-- Datatables -->
+  <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+  <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+<!-- Mis Scripts -->
+<script src="{% static 'build/mis_scripts.js' %}"></script>  
+
+<script>
+  $(document).ready(function() {
+      
+      init_datatables();
+      init_select2();
+      
+  });
+</script>
+
+
+{% endblock javascripts %}

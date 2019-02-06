@@ -1,0 +1,41 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} INICIO {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    
+    
+  </div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+  <!-- Skycons -->
+  <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+
+  <script>
+    function abrirEnPestana(url) {
+      var a = document.createElement("a");
+      a.href = url;
+      a.click();
+    }
+ 
+	  var url="{% url 'perfil_detail' user.usuarios.id %}";
+ 
+	  window.onload=function(){
+		  abrirEnPestana(url);
+	}
+	</script>
+</head>
+
+{% endblock javascripts %}

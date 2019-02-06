@@ -1,0 +1,206 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} EVALUACIÓN {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+<!-- Datatables -->
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1>Colaboradores</h1>
+    <!-- /top tiles -->
+
+    
+    <br />
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-4 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Lista</h2>
+            
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="box-body table-responsive">
+            <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+                <table width="100%" class="display nowrap" id="dataTables" >
+                    <thead align="center">
+                        <tr>
+                            <th>Colaborador</th>
+                            <th>Área</th>
+                            <th>Incentivo</th>
+                            <th>Fecha de Alta</th>
+                            <th>Fecha de Baja</th>
+                            <th>Activo</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+                        {% if object_list %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
+                        {% for colaborador in object_list %}
+                            {% if colaborador.user.id is user.id or user.is_superuser %} <!-- Solo permite mostrar las colaboradores del usuario logeado y si es super usuario muetra todo. -->
+                                <tr>
+                                    <td><a href="{% url 'perfil_update' colaborador.user.id %}">{{colaborador.user.first_name}} {{colaborador.user.last_name}}</a></td>
+                                    <td>{{colaborador.area}}</td>
+                                    <td>{{colaborador.incentivo}}</td>
+                                    <td>{{colaborador.fecha_ingreso|date:"SHORT_DATE_FORMAT"}}</td>
+                                    <td>{{colaborador.fecha_salida|date:"SHORT_DATE_FORMAT"}}</td>
+                                    <td>{% if colaborador.activo %}Alta{% else %}Baja{% endif %}</td>
+                                    
+                                    <td>
+                                        
+                                        <a class="btn btn-round btn-warning" href="{% url 'evaluacion_update' colaborador.user.id %}">Editar</a>
+                                        <a class="btn btn-round btn-success" href="{% url 'perfil_detail' colaborador.user.id %}">Perfil</a>
+                                    </td>
+                                </tr>
+                            {% endif %}	
+                        {% endfor %}
+                        {% else %}
+                        <h1>No hay registros de evaluaciones</h1>
+                        {% endif %}	
+                    </tbody>
+                    <tfoot>
+                      <th><input type="text" placeholder="Colaborador"/></th>
+                      <th><input type="text" placeholder="Área"/></th>
+                      <th><input type="text" placeholder="Incentivo"/></th>
+                      <th><input type="text" placeholder="Fecha de Alta"/></th>
+                      <th><input type="text" placeholder="Fecha de Baja"/></th>
+                      <th><input type="text" placeholder="Activo"/></th>
+                      <th><input type="text" placeholder="Acción"/></th>
+                    </tfoot>
+                </table>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-4 col-sm-4 col-xs-12">
+      <!-- Aquí se puede agregar información -->
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-8 col-sm-8 col-xs-12">
+        <div class="row">
+          <!-- End to do list -->
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+<!-- Datatables -->
+    <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+    <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+    <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+    <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+    <script>
+    $(document).ready(function() {
+
+        //Función de DataTable para establecer sus parámetros
+        $("#dataTables").DataTable({
+          dom: "Bfrtip",
+                buttons: [{
+                    extend: "copy",
+                    className: "btn-sm"
+                }, {
+                    extend: "csv",
+                    className: "btn-sm"
+                }, {
+                    extend: "excel",
+                    className: "btn-sm"
+                }, {
+                    extend: "pdfHtml5",
+                    className: "btn-sm"
+                }, {
+                    extend: "print",
+                    className: "btn-sm"
+                }, ],
+                //Cambiar el idioma, también se puede hacer con un json
+                language: {
+                            
+                    "sProcessing":     "Procesando...",
+                    "sLengthMenu":     "Mostrar _MENU_ registros",
+                    "sZeroRecords":    "No se encontraron resultados",
+                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix":    "",
+                    "sSearch":         "Buscar:",
+                    "sUrl":            "",
+                    "sInfoThousands":  ",",
+                    "sLoadingRecords": "Cargando...",
+                    "lengthChange": false,
+                    "oPaginate": {
+                        "sFirst":    "Primero",
+                        "sLast":     "Último",
+                        "sNext":     "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                },
+                responsive: true
+            });
+         
+            // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.
+            var table = $("#dataTables").DataTable();
+         
+            // // Aplicar las búsquedas por cada columna.
+            table.columns().every( function () {
+                var that = this;
+                
+                //En el tfooter se crearon los campos con th, se aplicada cada filtro a cada campo según su columna.
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            });
+
+    });
+    </script> 
+{% endblock javascripts %}

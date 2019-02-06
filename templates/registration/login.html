@@ -1,0 +1,53 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} Entrar {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="{% static 'vendors/animate.css/animate.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+          <form action="" method="post">
+            {% csrf_token %}
+            <h1>Iniciar Sesión</h1>
+            <div>
+              <input type="text" name="username" class="form-control" placeholder="Usuario" required="" />
+            </div>
+            <div>
+              <input type="password" name="password" class="form-control" placeholder="Contraseña" required="" />
+            </div>
+            <div>
+              <input type="submit" class="btn btn-default submit" value="Entrar">
+              <a class="reset_pass" href="#">Olvidó su contraseña?</a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="separator">
+              <br />
+
+              <div>
+                <h1><i class="fa fa-qq"></i> MrCante</h1>
+                <p>©2019 Todos los derechos reservados. MrCante. Términos de privacidad</p>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+
+    </div>
+  </div>
+{% endblock body %}
+
