@@ -15,11 +15,6 @@ from .forms import PerfilForm, DetalleAsignacionEquipoForm, AsignacionEquipoForm
 
 from django.template import RequestContext
 
-def Alarmas(request):
-    request.session['alarma'] = 1
-    return render(request)
-
-
 class PerfilUpdateView(GroupRequiredMixin, LoginRequiredMixin, UpdateView):
     group_required = [u"admin", u"Tecnicos"]
     model = Perfil
