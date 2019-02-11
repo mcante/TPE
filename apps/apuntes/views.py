@@ -60,9 +60,11 @@ class NotaCreateView(GroupRequiredMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.creado_por = self.request.user
+        print("Usuario:" + str(self.request.user))
         return super(NotaCreateView, self).form_valid(form)
     
     def get_success_url(self):
+        print("PK categoria: " + str(self.object.categoria.id))
         return reverse('categoria_detail_notas', kwargs={'pk':self.object.categoria.id})
 
 
