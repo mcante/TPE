@@ -114,7 +114,7 @@ class NotaDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(NotaDetailView, self).get_context_data(**kwargs)
         #context['tabla'] = Nota.objects.all().filter(categoria=self.object).order_by('-fecha') # Ordenar resultado descendentemente por la columna fecha.
-        context['nota_form'] = NotaForm(initial={'creado_por': self.object, 'categoria':self.object, 'fecha': datetime.datetime.now, 'hora':datetime.datetime.now})
+        context['nota_form'] = NotaForm(initial={'creado_por': self.request.user, 'categoria':self.object, 'fecha': datetime.datetime.now, 'hora':datetime.datetime.now})
         return context
 
 # Eliminar Nota

@@ -27,7 +27,8 @@ class NotaForm(forms.ModelForm):
             'hora': forms.TimeInput(attrs={'disabled':'disabled'}),
             'necesita_seguimiento': forms.CheckboxInput(attrs={'class':'switch1'}),
             'categoria': forms.HiddenInput(),
-            'creado_por': forms.HiddenInput(),
+            #'creado_por': forms.HiddenInput(),
+            'creado_por': forms.Select(attrs={"disabled":"disabled"}),
             'creado': forms.HiddenInput(),
             'actualizado': forms.HiddenInput()
         }
