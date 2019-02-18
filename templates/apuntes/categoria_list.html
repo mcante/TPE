@@ -59,14 +59,16 @@
                     <tbody>
                         {% if object_list %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
                         {% for categoria in categoria %}
-                            
+                          
                                 <tr>
                                     <td>{{categoria.fecha}}</td>
                                     <td>{{categoria.nombre}}</td>                                    
                                     <td>{{categoria.descripcion}}</td>                                    
                                     <td>{{categoria.creado_por.first_name}} {{categoria.creado_por.last_name}}</td>
                                     <td>
+                                      {% if categoria.creado_por.id is user.id or user.is_superuser %}
                                         <a class="btn btn-xs btn-warning" href="{% url 'categoria_update' categoria.id %}">Editar</a>
+                                      {% endif %}
                                         <a class="btn btn-xs btn-success" href="{% url 'categoria_detail_notas' categoria.id %}">Ver cuaderno</a>
                                     </td>
                                 </tr>

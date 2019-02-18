@@ -43,10 +43,7 @@ class CategoriaListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CategoriaListView, self).get_context_data(**kwargs)
-        if self.request.user.is_superuser:
-            context['categoria'] = Categoria.objects.all()
-        else:
-            context['categoria'] = Categoria.objects.all().filter(creado_por=self.request.user)
+        context['categoria'] = Categoria.objects.all().filter(creado_por=self.request.user)|Categoria.objects.all().filter(publico=True) # Query con OR une dos consultas.
         return context
 
 
@@ -73,6 +70,11 @@ class NotaUpdateView(GroupRequiredMixin, LoginRequiredMixin, UpdateView):
     model = Nota
     form_class = NotaForm
     template_name = 'apuntes/nota_add.html'
+
+    def form_valid(self, form):
+        form.instance.creado_por = self.request.user
+        print("Usuario:" + str(self.request.user))
+        return super(NotaUpdateView, self).form_valid(form)
     
     def get_success_url(self):
         return reverse('categoria_detail_notas', kwargs={'pk':self.object.categoria.id})

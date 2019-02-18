@@ -20,6 +20,7 @@ class Categoria(ControlCreaciones):
     fecha = models.DateField(default=datetime.datetime.now, null=True, blank=True)
     descripcion = models.TextField(max_length=250, verbose_name="Descripción", null=True, blank=True)
     creado_por = models.ForeignKey(User, related_name='rel_Categoria_User', on_delete=models.CASCADE, null=True, blank=True)
+    publico = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nombre

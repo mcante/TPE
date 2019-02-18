@@ -93,11 +93,12 @@
                     <thead>
                         <tr>
                             <th>Fecha</th>
-                            <th>Recordatorio</th>
+                            <th>Recordar</th>
                             <th>Título</th>
                             <th>Nota</th>
                             <th>Pendiente</th>
                             <th>Link</th>
+                            <th>creado Por</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -111,7 +112,7 @@
                                 {% if dtnota.fecha_recordatorio %}
                                     {{ dtnota.fecha_recordatorio }}</td>
                                 {% else %}
-                                    Sin Recordatorio
+                                    No
                                 {% endif %}
                             <td>{{ dtnota.titulo }}</td>
                             <td>{{ dtnota.contenido }}</td>
@@ -123,11 +124,14 @@
                                     Ninguno
                                 {% endif %}
                             </td>
+                            <td>{{ dtnota.creado_por.first_name }} {{ dtnota.creado_por.last_name }}</td>
                             
                             <td>
                                 {% if dtnota.id %}
-                                <a class="btn btn-xs btn-primary" href="{% url 'nota_update' dtnota.id %}">Editar</a>
-                                <a class="btn btn-xs btn-danger" href="{% url 'nota_delete' dtnota.id %}">Eliminar</a>
+                                    {% if dtnota.creado_por.id is user.id or user.is_superuser %}
+                                        <a class="btn btn-xs btn-primary" href="{% url 'nota_update' dtnota.id %}">Editar</a>
+                                        <a class="btn btn-xs btn-danger" href="{% url 'nota_delete' dtnota.id %}">Eliminar</a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
