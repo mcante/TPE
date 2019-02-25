@@ -60,6 +60,11 @@ class DetalleDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
     model = Evaluacion
     template_name = 'evaluaciones/evaluacion_detail.html'
 
+class ImprimirDetalleDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
+    group_required = [u"admin", u"Tecnicos"]
+    model = Evaluacion
+    template_name = 'evaluaciones/imprimir_evaluacion.html'
+
 class InicioListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
     group_required = [u"admin", u"Tecnicos"]
     model = Evaluacion

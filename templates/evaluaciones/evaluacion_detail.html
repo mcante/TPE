@@ -85,7 +85,7 @@
                                         <a class="btn btn-round btn-primary" href="{% url 'evaluacion_update' object.id %}">Editar</a>
                                         <a class="btn btn-round btn-danger" href="#">Eliminar</a>
                                     {% else %}
-                                        <a class="btn btn-round btn-info" href="#"><i class="fa fa-print"></i> Imprimir</a>
+                                        <a class="btn btn-round btn-info" href="{% url 'imprimir_evaluacion_detalle' object.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
                                     {% endif %}
                                 {% endif %}
                                                                         

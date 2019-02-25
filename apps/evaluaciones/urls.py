@@ -4,7 +4,7 @@ from django.urls import path, include
 
 from .views import VersionCreateView, VersionListView, VersionUpdateView, \
 EvaluacionCreateView, EvaluacionListView, EvaluacionUpdateView, DetalleDetailView, \
-InicioListView
+InicioListView, ImprimirDetalleDetailView
 
 urlpatterns = [
     # VERSION
@@ -18,6 +18,7 @@ urlpatterns = [
     path('list/', EvaluacionListView.as_view(), name='evaluacion_list'),
 
     path('detalle/<int:pk>/', DetalleDetailView.as_view(), name='evaluacion_detalle'),
+    path('imprimir/<int:pk>/', ImprimirDetalleDetailView.as_view(), name='imprimir_evaluacion_detalle'),
     
     path('', InicioListView.as_view(), name='home'),
 ]
