@@ -29,6 +29,13 @@ class EvaluacionForm(forms.ModelForm):
             'creado': forms.HiddenInput(),
             'actualizado': forms.HiddenInput()
         }
+    
+    def __init__(self, *args, **kwargs):
+        super(EvaluacionForm, self).__init__(*args, **kwargs)
+        self.fields['empleado'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
+        self.fields['evaluador'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
+
+
 
 class EvaluacionUpdateForm(forms.ModelForm):
     class Meta:
@@ -44,4 +51,9 @@ class EvaluacionUpdateForm(forms.ModelForm):
             'actualizado': forms.HiddenInput(),
             'version': forms.HiddenInput()
         }
+        
+    def __init__(self, *args, **kwargs):
+        super(EvaluacionForm, self).__init__(*args, **kwargs)
+        self.fields['empleado'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
+        self.fields['evaluador'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
 

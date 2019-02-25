@@ -42,7 +42,7 @@
           </div>
           <div class="box-body table-responsive">
             <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
-                <table width="100%" class="display nowrap table-striped table-hover" id="dataTables" >
+                <table width="100%" class="table table-condensed table-striped table-hover" id="dataTables" >
                     <thead align="center">
                         <tr>
                             <th>Colaborador</th>
@@ -78,9 +78,9 @@
                                     
                                     <td>
                                         {% if user.is_superuser %}
-                                            <a class="btn btn-round btn-warning" href="{% url 'evaluacion_update' evaluacion.id %}">Editar</a>
+                                            <a class="btn btn-xs btn-warning" href="{% url 'evaluacion_update' evaluacion.id %}">Editar</a>
                                         {% endif %}
-                                        <a class="btn btn-round btn-success" href="{% url 'evaluacion_detalle' evaluacion.id %}">Ver Indicadores</a>
+                                        <a class="btn btn-xs btn-success" href="{% url 'evaluacion_detalle' evaluacion.id %}">Ver Indicadores</a>
                                     </td>
                                 </tr>
                             {% endif %}	
