@@ -53,7 +53,7 @@ class EvaluacionUpdateForm(forms.ModelForm):
         }
         
     def __init__(self, *args, **kwargs):
-        super(EvaluacionForm, self).__init__(*args, **kwargs)
+        super(EvaluacionUpdateForm, self).__init__(*args, **kwargs)
         self.fields['empleado'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
         self.fields['evaluador'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
 
