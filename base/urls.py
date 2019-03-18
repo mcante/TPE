@@ -31,6 +31,8 @@ urlpatterns = [
     path('indicador/', include('apps.indicadores.urls')),
     path('perfil/', include('apps.registration.urls')),
     path('apuntes/', include('apps.apuntes.urls')),
+    path('entregas/', include('apps.equipamientos.urls')),
+    path('planificacion/', include('apps.tareas.urls')),
 
     path('accounts/', include('django.contrib.auth.urls')),
 ]

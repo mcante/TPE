@@ -68,6 +68,26 @@
           </li>
         {% endif %}
 
+        {% if user.is_superuser %}
+          <li><a><i class="fa fa-cogs"></i> Programación de Entregas <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'equipamiento_add' %}">Nuevo Equipamiento</a></li>
+              <li><a href="{% url 'equipamiento_list' %}">Listar Equipamientos</a></li>
+            </ul>
+          </li>
+        {% endif %}
+
+        
+          <li><a><i class="fa fa-rocket"></i> Planificaciones <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'programacion_add' %}">Nueva</a></li>
+              <li><a href="{% url 'programaciones_list' %}">Completadas</a></li>
+              <li><a href="{% url 'programaciones_pendientes_list' %}">Pendientes</a></li>
+              
+            </ul>
+          </li>
+        
+
       </ul>
       
     </div>

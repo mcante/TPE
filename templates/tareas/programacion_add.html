@@ -1,0 +1,95 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} PROGRAMACIÓN {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="right_col" role="main">
+  <!-- top tiles -->
+  <h1>Programación</h1>
+  <!-- /top tiles -->
+  
+  <br />
+  
+  <div class="row">
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>... <small>datos de la programación</small></h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <br />
+          
+          <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+          <div class="box-body  table-responsive">
+            <form method="post" action="" class="form-horizontal form-label-left">
+              <table class="table table-striped table-hover table-condensed">
+                {% csrf_token %}
+                {{form.as_table}}	
+              </table>
+              <button type="submit" class="btn btn-round btn-primary" tabindex="9" onBlur=irPrimero();>Guardar</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+{{ block.super}}
+
+<!-- DateJS -->
+<script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+<!-- bootstrap-moment -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+
+<!-- Mis Scripts -->
+<script src="{% static 'build/mis_scripts.js' %}"></script>  
+
+<!-- CSS -->
+<style type="text/css">
+  input:focus, textarea:focus, select:focus{
+    /* background-color: rgb(0, 162, 255); */
+    outline: 2px solid rgb(0, 174, 255);
+  }
+</style>
+
+<script>
+  function irPrimero(){
+    var tab = $(".primero");
+      tab.focus();
+    }
+</script>
+
+<script>
+  $(document).ready(function() {
+    
+    init_Switchery();
+    init_select2();
+    init_datapicker();
+    
+  });
+</script>
+
+
+{% endblock javascripts %}

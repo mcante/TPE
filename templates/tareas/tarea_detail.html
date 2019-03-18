@@ -1,0 +1,223 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} TAREA {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+<!-- Datatables -->
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    
+    <a class="btn btn-round btn-warning" href="{% url 'programacion_detail' object.programacion.id %}"><i class="fa fa-reply"></i> Regresar a la planificación</a>
+    {% if object.estado.id == 2 or object.estado.id == 1 %} 
+        {% if object.programacion.cerrado is False %}
+            <a class="btn btn-round btn-primary" href="{% url 'tarea_update' object.id %}">Editar</a>
+        {% endif %}
+    {% endif %}
+    <!-- /top tiles -->
+    
+
+
+{# PROGRAMACIÓN #}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="table-responsive-sm">
+            <h2>Datos de tarea</h2>
+            
+                <div class="col-sm-12 table-responsive">
+                    <table width="100%" class="table nowrap table-condensed table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tarea</th>
+                                <th>Planificada</th>
+                                <th>Completado</th>
+                                <th>Tiempo Restante</th>
+                                <th>Anotaciones</th>
+                                <th>Tiempo de entrega tarde</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ object.tarea }}</td>
+                                <td> <strong>Del: </strong> {{ object.fecha_hora_inicio|date:"d-m-Y H:i"}} -- <strong>Al: </strong>{{ object.fecha_hora_planificada|date:"d-m-Y H:i" }}</td>
+                                <td>{% if object.fecha_hora_completado %} Sí, el {{object.fecha_hora_completado}} {% else %} {{ object.estado }} {% endif %}</td>
+                                <td>
+                                    <form name="formulario">
+                                        <input type="text" name="reloj" value="" size="40" style="border : 1px solid black; text-align : center; background-color:rgb(252, 255, 67);color:blue">
+                                    </form>
+                                </td>
+                                <td>{{ object.anotaciones }}</td>
+                                <td>{{ object.get_tiemporestante }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            
+        </div>
+    </div>
+    
+</div>
+
+<hr style="color:rgb(4, 47, 141);"  size="20" />
+
+{# FORMULARIO PARA AGREGAR NOTAS A LA TAREA / ESTE FORMULARIO SE OCULTA #}
+
+
+
+
+{# DETALLE DE NOTAS PROGRAMADAS #}
+<div class="row">
+
+{% if object.programacion.cerrado is False %}
+    <div class="col-md-3 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><a class="collapse-link"> Agregar <i class="fa fa-chevron-down"></i></a><small> nota al histórico</small></h2>
+                
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content" style="display: none;">
+                <br />
+                
+                <div class="box-body  table-responsive">
+                <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+                <form action="{% url 'nota_add' %}" method="post">
+                    <table class="table nowrap table-condensed table-striped table-hover">
+
+                        {% csrf_token %}
+                        {{nota_form.as_table}}	
+
+                    </table>
+                    <button type="submit" class="btn btn-round btn-primary">Agregar</button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+    
+    <div class="col-md-9 col-sm-6 col-xs-12">
+        <div class="x_panel">
+            <div class="box-header with-border">
+                <h2>Histórico</h2> 
+            </div>
+            
+            <div id="collapse1" class="table-responsive">
+                <table width="100%" class="table table-condensed table-striped table-hover" id="dataTables">
+                    <thead>
+                        <tr>
+                            <th>Apunte</th>
+                            <th>Fecha y Hora Apunte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if object %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
+                        {% for task in object.rel_AnotacionesTarea_Tareas.all %}
+                        <tr>
+                            <td>{{ task.apunte }}</td>
+                            <td>{{ task.fecha_hora_anotacion|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <h1>No hay registros de asignación de Notas</h1>
+                        {% endif %} 
+                    </tbody>
+                    <tfoot>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div> 
+    </div>        
+</div>
+
+  </div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  
+  <!-- Skycons -->
+  <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+  <!-- DateJS -->
+  <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+  
+  <!-- Datatables -->
+  <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+  <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+<!-- Mis Scripts -->
+<script src="{% static 'build/mis_scripts.js' %}"></script>  
+
+<script>
+  $(document).ready(function() {
+      init_datatables();  
+  });
+
+
+var futuro = new Date({{ object.get_fechaPlanificada }});
+
+var actualiza = 1000;
+
+function faltan() {
+    
+    var ahora = new Date();
+    
+    var faltan = futuro - ahora;
+    
+    // si todavís no es futuro
+    if (faltan > 0) {
+        var segundos = Math.round(faltan / 1000);
+        var minutos = Math.floor(segundos / 60);
+        var segundos_s = segundos % 60;
+        var horas = Math.floor(minutos / 60);
+        var minutos_s = minutos % 60;
+        var dias = Math.floor(horas / 24);
+        var horas_s = horas % 24;
+        // escribe los resultados
+        (segundos_s < 10) ? segundos_s = "0" + segundos_s : segundos_s = segundos_s;
+        (minutos_s < 10) ? minutos_s = "0" + minutos_s : minutos_s = minutos_s;
+        (horas_s < 10) ? horas_s = "0" + horas_s : horas_s = horas_s;
+        (dias < 10) ? dias = "0" + dias : dias = dias;
+        var resultado = dias + " dias : " + horas_s + " horas : " + minutos_s + " minutos : " + segundos_s + " segundos";
+        document.formulario.reloj.value = resultado;
+        //actualiza el contador
+        setTimeout("faltan()", actualiza);
+    }
+    // estamos en el futuro
+    else {
+        document.formulario.reloj.value = "¡No hay más tiempo!";
+    }
+}
+faltan();
+
+</script>
+
+
+{% endblock javascripts %}

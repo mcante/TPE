@@ -24,6 +24,57 @@
       </li>
 
 
+
+
+      <!-- Alarmas de Tareas -->
+      <li role="presentation" class="dropdown">
+        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-check"></i>
+          <span class="badge bg-red">{{ PorHacer.count }}</span>
+        </a>
+        
+        <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+          {% for tarea in PorHacer %}
+          <li>
+            <a href="{% url 'tarea_detail' tarea.id %}">
+              <span class="image"><img src="{% static 'img/clock.gif' %}" height="30" width="45" /></span>
+              <span>
+                {% if tarea.estado.id == 1 %}
+                  <span class="count blue">{{ tarea.estado }}</span>
+                {% else %}
+                  <span class="count green">{{ tarea.estado }}</span>
+                {% endif %}
+                  <br>
+                  <span class="time count green">Del: {{ tarea.fecha_hora_inicio|date:"d-m-Y H:i" }}</span>
+                  <br>
+                  <span class="time count red">Al: {{ tarea.fecha_hora_planificada|date:"d-m-Y H:i" }}</span>
+                
+              </span>
+              <br>
+              <span class="message">
+                {{ tarea.tarea }}
+              </span>
+            </a>
+            <hr>
+          </li>
+          {% endfor %}
+
+          <li>
+            <div class="text-center">
+              <a href="{% url 'tareas_list' %}">
+                <strong>Ver todo</strong>
+                <i class="fa fa-angle-right"></i>
+              </a>
+            </div>
+          </li>
+
+        </ul>
+      </li>
+      <!-- FIN - Alarmas de Tareas -->
+
+
+
+
       
       <!-- Alarmas de Notas -->
       <li role="presentation" class="dropdown">

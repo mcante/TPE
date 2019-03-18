@@ -151,6 +151,16 @@ function init_datapicker() {
     $('.myDatepicker2').datetimepicker({
         format: 'DD/MM/YYYY',
     });  
+
+    $('.myDateTimepicker').datetimepicker({
+        format: 'DD/MM/YYYY H:mm',
+        //use24hours: true
+    });  
+    
+    $('.myDateTimepicker2').datetimepicker({
+        format: 'DD/MM/YYYY H:mm',
+        //use24hours: true
+    }); 
 };
 
 
