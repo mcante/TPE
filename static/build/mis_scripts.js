@@ -139,27 +139,32 @@ function init_datapicker() {
 
     $('.myDatepicker').datetimepicker({
         format: 'DD/MM/YYYY',
+        locale:'es'
     });
     
     
 
     $('.myDatepicker1').datetimepicker({
         format: 'DD/MM/YYYY',
+        locale:'es'
     });
 
 
     $('.myDatepicker2').datetimepicker({
         format: 'DD/MM/YYYY',
+        locale:'es'
     });  
 
     $('.myDateTimepicker').datetimepicker({
         format: 'DD/MM/YYYY H:mm',
         //use24hours: true
+        locale:'es'
     });  
     
     $('.myDateTimepicker2').datetimepicker({
         format: 'DD/MM/YYYY H:mm',
         //use24hours: true
+        locale:'es'
     }); 
 };
 
