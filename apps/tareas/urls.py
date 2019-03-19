@@ -19,6 +19,6 @@ urlpatterns = [
     path('task/detail/<int:pk>/', TareaDetailView.as_view(), name='tarea_detail'),
 
     # NOTA
-    path('task/nota/add/', NotaCreateView.as_view(), name='nota_add'),
+    path('task/nota/add/', NotaCreateView.as_view(), name='nota_task_add'),
 
 ]
