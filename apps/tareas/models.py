@@ -56,7 +56,7 @@ class Tareas(ControlCreaciones):
     tarea = models.TextField(null=True, blank=True)
     fecha_hora_inicio = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
     fecha_hora_planificada = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
-    anotaciones = models.TextField(max_length=250, null=True, blank=True)
+    anotaciones = models.TextField(null=True, blank=True)
     estado = models.ForeignKey(Estados, related_name='rel_Tareas_Estados', on_delete=models.CASCADE, null=True, blank=True)
     completado = models.BooleanField(default=False)
     fecha_hora_completado = models.DateTimeField(null=True, blank=True)
@@ -159,7 +159,7 @@ def insertar_fecha(sender, instance, **kwargs):
 
 class AnotacionesTarea(ControlCreaciones):
     tarea = models.ForeignKey(Tareas, related_name='rel_AnotacionesTarea_Tareas', on_delete=models.CASCADE, null=True, blank=True)
-    apunte = models.TextField(max_length=250, null=True, blank=True)
+    apunte = models.TextField(null=True, blank=True)
     fecha_hora_anotacion = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
     
 
