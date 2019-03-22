@@ -136,23 +136,28 @@
 
         //Función de DataTable para establecer sus parámetros
         $("#dataTables").DataTable({
-          dom: "Bfrtip",
-                buttons: [{
+          dom: "Blfrtip",
+          buttons: [{
                     extend: "copy",
-                    className: "btn-sm"
+                    className: "btn-primary",
+                    text: "Copiar"
                 }, {
                     extend: "csv",
-                    className: "btn-sm"
+                    className: "btn-success",
+                    text: "Excel"
                 }, {
                     extend: "excel",
-                    className: "btn-sm"
+                    className: "btn-sm",
+                    text: "Excel"
                 }, {
-                    extend: "pdfHtml5",
-                    className: "btn-sm"
+                    extend: "pdf",
+                    className: "btn-sm",
+                    text: "PDF"
                 }, {
                     extend: "print",
-                    className: "btn-sm"
-                }, ],
+                    className: "btn-primary",
+                    text: "Imprimir"
+                }],
                 //Cambiar el idioma, también se puede hacer con un json
                 language: {
                             
@@ -180,6 +185,8 @@
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
+                paging: true,
+                pagingType: "full_numbers",
                 //responsive: true // No permitir que la tabla resultante sea responsive
                 //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
                 "order": [[ 1, "asc" ]] // Indicar que se desea ordenar descendentemente la columna 1

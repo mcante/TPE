@@ -139,7 +139,7 @@
 
         //Función de DataTable para establecer sus parámetros
         $("#dataTables").DataTable({
-          dom: "Bfrtip",
+          dom: "Blfrtip",
                 buttons: [{
                     extend: "copy",
                     className: "btn-sm"
@@ -183,6 +183,8 @@
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
+                paging: true,
+                pagingType: "full_numbers",
                 //responsive: true // No permitir que la tabla resultante sea responsive
                 //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
                 "order": [[ 1, "asc" ]] // Indicar que se desea ordenar descendentemente la columna 1

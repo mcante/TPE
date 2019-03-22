@@ -9,23 +9,28 @@ function init_datatables() {
 
         //Función de DataTable para establecer sus parámetros
         $("#dataTables").DataTable({
-          dom: "Bfrtip",
-                buttons: [{
-                    extend: "copy",
-                    className: "btn-sm"
-                }, {
-                    extend: "csv",
-                    className: "btn-sm"
-                }, {
-                    extend: "excel",
-                    className: "btn-sm"
-                }, {
-                    extend: "pdfHtml5",
-                    className: "btn-sm"
-                }, {
-                    extend: "print",
-                    className: "btn-sm"
-                }, ],
+          dom: "Blfrtip",
+          buttons: [{
+                extend: "copy",
+                className: "btn-primary",
+                text: "Copiar"
+            }, {
+                extend: "csv",
+                className: "btn-success",
+                text: "Excel"
+            }, {
+                extend: "excel",
+                className: "btn-sm",
+                text: "Excel"
+            }, {
+                extend: "pdf",
+                className: "btn-sm",
+                text: "PDF"
+            }, {
+                extend: "print",
+                className: "btn-primary",
+                text: "Imprimir"
+            }],
                 //Cambiar el idioma, también se puede hacer con un json
                 language: {
                             
@@ -53,6 +58,8 @@ function init_datatables() {
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
+                paging: true,
+                pagingType: "full_numbers",
                 //responsive: true // No permitir que la tabla resultante sea responsive
                 //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
                 "order": [[ 0, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 0
