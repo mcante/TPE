@@ -165,13 +165,15 @@ function init_datapicker() {
     $('.myDateTimepicker').datetimepicker({
         format: 'DD/MM/YYYY H:mm',
         //use24hours: true
-        locale:'es'
+        locale:'es',
+        stepping: 15,
     });  
     
     $('.myDateTimepicker2').datetimepicker({
         format: 'DD/MM/YYYY H:mm',
         //use24hours: true
-        locale:'es'
+        locale:'es',
+        stepping: 15,
     }); 
 };
 
