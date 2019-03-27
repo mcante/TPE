@@ -220,7 +220,7 @@
                                 {% if task.id %}
                                 <a class="btn btn-round btn-xs btn-success" href="{% url 'tarea_detail' task.id %}">Dar seguimiento</a>
                                 {% if task.estado.id == 1 or task.estado.id == 2 or user.is_superuser %}
-                                    {% if object.cerrado is False %}
+                                    {% if user.is_superuser %}
                                         <a class="btn btn-round btn-xs btn-primary" href="{% url 'tarea_update' task.id %}">Editar</a>
                                     {% endif %}    
                                 {% endif %}
@@ -277,7 +277,7 @@
   <!-- FullCalendar -->
   <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
   <script src="{% static 'vendors/fullcalendar/dist/fullcalendar.min.js' %}"></script>
-  <script src="{% static 'vendors/fullcalendar/dist/lang/es.js' %}"></script>
+  <script src="{% static 'vendors/fullcalendar/dist/locale-all.js' %}"></script>
 
 <!-- Mis Scripts -->
 <script src="{% static 'build/mis_scripts.js' %}"></script>  
@@ -359,23 +359,17 @@ $("#dataTables").DataTable({
             });
 </script>
 
+
 <script>
-  $(document).ready(function() {
-      
-      
-      init_select2();
-      init_datapicker();
-
-
-      console.log('init_calendar_mis_scripts');
-
+    console.log('init_calendar_mis_scripts');
+    
     var date = new Date(),
         d = date.getDate(),
         m = date.getMonth(),
         y = date.getFullYear(),
         started,
         categoryClass;
-
+    
     var calendar = $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -383,21 +377,21 @@ $("#dataTables").DataTable({
             right: 'month,agendaWeek,agendaDay,listMonth'
         },
         locale: 'es',
-
-
+    
+    
         //selectable: true,
         eventRender: function(event, element){
-	          element.popover({
-	              animation:true,
-	              delay: 300,
-	              content: "Tarea: "+event.title,
-	              trigger: 'hover'
-	          });
-	        },
-	    
-
+              element.popover({
+                  animation:true,
+                  delay: 300,
+                  content: "Tarea: "+event.title,
+                  trigger: 'hover'
+              });
+            },
+        
+    
         editable: true,
-
+    
         events: [
             {% for task in object.rel_Tareas_Programaciones.all %}
             {% if task.estado.id == 3 %}
@@ -431,10 +425,29 @@ $("#dataTables").DataTable({
             {% endfor %}
             ]
     });
+    </script>
+
+
+
+<script>
+  $(document).ready(function() {
       
+      init_select2();
+      init_datapicker();
+
   });
 </script>
 
 
+<script>
+  // Campos fecha inicio a final o planificada.
+  $(document).ready(function () {
+  $("#id_fecha_hora_inicio").keyup(function () {
+    var value = $(this).val();
+    $("#id_fecha_hora_planificada").val(value);
+  });
+
+});
+</script>
 
 {% endblock javascripts %}

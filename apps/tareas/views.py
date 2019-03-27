@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import GroupRequiredMixin
 
 from .models import AnotacionesTarea, Programaciones, Tareas
-from .forms import ProgramacionesForm, TareaForm, TareaUpdateForm, NotaTareaForm
+from .forms import ProgramacionesForm, TareaForm, TareaUpdateForm, NotaTareaForm, TareaEstadoUpdateForm
 
 # PROGRAMACIONES
 class ProgramacionesListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
@@ -95,6 +95,19 @@ class TareasUpdateView(GroupRequiredMixin, LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('tarea_detail', kwargs={'pk':self.object.id})
 
+class TareaEstadoUpdateView(GroupRequiredMixin, LoginRequiredMixin, UpdateView):
+    group_required = [u"admin", u"Tecnicos", u"Supervisores"]
+    model = Tareas
+    form_class = TareaEstadoUpdateForm
+    template_name = 'tareas/tarea_add.html'
+
+    def form_valid(self, form):
+        return super(TareaEstadoUpdateView, self).form_valid(form)
+
+
+    def get_success_url(self):
+        return reverse('tarea_detail', kwargs={'pk':self.object.id})
+
 class TareaDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
     group_required = [u"admin", u"Tecnicos", u"Supervisores"]
     model = Tareas
@@ -103,6 +116,7 @@ class TareaDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(TareaDetailView, self).get_context_data(**kwargs)
         context['nota_form'] = NotaTareaForm(initial={'fecha_hora_anotacion': datetime.datetime.now, 'tarea': self.object})
+        context['nota_estado_form'] = TareaEstadoUpdateForm(initial={'estado': self.object.estado})
         return context
 
 # Nota Task

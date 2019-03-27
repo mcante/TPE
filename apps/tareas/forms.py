@@ -72,6 +72,17 @@ class TareaUpdateForm(forms.ModelForm):
         }
 
 
+class TareaEstadoUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Tareas
+        fields = ('estado',)
+        widgets = {
+            'estado': forms.Select(attrs={"id":"select2_1"}),
+            
+        }
+
+
+
 class NotaTareaForm(forms.ModelForm):
     class Meta:
         model = AnotacionesTarea

@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from .views import ProgramacionesListView, ProgramacionesCreateView, ProgramacionesUpdateView, ProgramacionesDetailView, ProgramacionesPendientesListView, \
-    TareasCreateView, TareasListView, TareasUpdateView, TareaDetailView, \
+    TareasCreateView, TareasListView, TareasUpdateView, TareaDetailView, TareaEstadoUpdateView, \
     NotaCreateView
 
 urlpatterns = [
@@ -16,6 +16,7 @@ urlpatterns = [
     path('task/list/', TareasListView.as_view(), name='tareas_list'),
     path('task/add/', TareasCreateView.as_view(), name='tarea_add'),
     path('task/update/<int:pk>/', TareasUpdateView.as_view(), name='tarea_update'),
+    path('task/update/estado/<int:pk>/', TareaEstadoUpdateView.as_view(), name='tarea_estado_update'),
     path('task/detail/<int:pk>/', TareaDetailView.as_view(), name='tarea_detail'),
 
     # NOTA

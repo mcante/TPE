@@ -18,13 +18,31 @@
     <!-- top tiles -->
     
     <a class="btn btn-round btn-warning" href="{% url 'programacion_detail' object.programacion.id %}"><i class="fa fa-reply"></i> Regresar a la planificación</a>
-    {% if object.estado.id == 2 or object.estado.id == 1 %} 
-        {% if object.programacion.cerrado is False %}
-            <a class="btn btn-round btn-primary" href="{% url 'tarea_update' object.id %}">Editar</a>
-        {% endif %}
-    {% endif %}
+    
+            
+        
     <!-- /top tiles -->
     
+
+
+{% if object.estado.id == 2 or object.estado.id == 1 %} 
+    {% if object.programacion.cerrado is False %}
+    <div class="row">
+        <div class="col-md-2 col-sm-6 col-xs-8">
+            <div class="table-responsive-sm">
+                <form action="{% url 'tarea_estado_update' pk=object.id %}" method="post">
+                    {% csrf_token %}
+                    {{nota_estado_form.as_p}} 
+                    <button type="submit" class="btn btn-round btn-primary">Actualizar estado</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    {% endif %}
+{% endif %}
+
+
 
 
 {# PROGRAMACIÓN #}
@@ -219,5 +237,13 @@ faltan();
 
 </script>
 
+
+<script>
+    $(document).ready(function() {
+        
+        init_select2();
+  
+    });
+  </script>
 
 {% endblock javascripts %}
