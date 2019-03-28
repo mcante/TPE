@@ -63,7 +63,7 @@
                     <tbody>
                         {% if object_list %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
                         {% for evaluacion in object_list %}
-                            {% if evaluacion.empleado.id is user.id or user.is_superuser %} <!-- Solo permite mostrar las evaluaciones del usuario logeado y si es super usuario muetra todo. -->
+                            {% if evaluacion.empleado.id is user.id or user.is_superuser and evaluacion.completado %} <!-- Solo permite mostrar las evaluaciones del usuario logeado y si es super usuario muetra todo. -->
                                 <tr>
                                     <td><a href="{% url 'perfil_detail' evaluacion.empleado.id %}">{{evaluacion.empleado.first_name}} {{evaluacion.empleado.last_name}}</a></td>
                                     <td>{{evaluacion.version}}</td>

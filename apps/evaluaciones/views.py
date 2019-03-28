@@ -53,6 +53,13 @@ class EvaluacionListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
     model = Evaluacion
     template_name = 'evaluaciones/evaluacion_list.html'
 
+class EvaluacionPendienteListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
+    group_required = [u"admin", u"Tecnicos"]
+    redirect_unauthenticated_users = True
+    raise_exception = True
+    success_message = "Usuario sin permisos"
+    model = Evaluacion
+    template_name = 'evaluaciones/evaluacion_pendiente_list.html'
 
 # Listar Pedido con su Detalle
 class DetalleDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):

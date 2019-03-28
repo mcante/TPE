@@ -3,7 +3,7 @@
 from django.urls import path, include
 
 from .views import VersionCreateView, VersionListView, VersionUpdateView, \
-EvaluacionCreateView, EvaluacionListView, EvaluacionUpdateView, DetalleDetailView, \
+EvaluacionCreateView, EvaluacionListView, EvaluacionUpdateView, DetalleDetailView, EvaluacionPendienteListView, \
 InicioListView, ImprimirDetalleDetailView
 
 urlpatterns = [
@@ -15,7 +15,8 @@ urlpatterns = [
     # EVALUACION
     path('add/', EvaluacionCreateView.as_view(), name='evaluacion_add'),
     path('update/<int:pk>/', EvaluacionUpdateView.as_view(), name='evaluacion_update'),
-    path('list/', EvaluacionListView.as_view(), name='evaluacion_list'),
+    path('list/completadas/', EvaluacionListView.as_view(), name='evaluacion_list'),
+    path('list/pendientes/', EvaluacionPendienteListView.as_view(), name='evaluacion_pendiente_list'),
 
     path('detalle/<int:pk>/', DetalleDetailView.as_view(), name='evaluacion_detalle'),
     path('imprimir/<int:pk>/', ImprimirDetalleDetailView.as_view(), name='imprimir_evaluacion_detalle'),
