@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import GroupRequiredMixin
 
 
 from .models import Version, Evaluacion
-from .forms import VersionForm, EvaluacionForm, EvaluacionUpdateForm
+from apps.indicadores.models import VersionIndicador
+from .forms import VersionForm, EvaluacionForm, EvaluacionUpdateForm, VersionIndicadorForm
 
 # VERSION
 class VersionCreateView(GroupRequiredMixin, LoginRequiredMixin, CreateView):
@@ -28,6 +29,26 @@ class VersionListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
     group_required = [u"admin",]
     model = Version
     template_name = 'evaluaciones/version_list.html'
+
+class VersionDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
+    group_required = [u"admin", u"Supervisores"]
+    model = Version
+    template_name = 'evaluaciones/version_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VersionDetailView, self).get_context_data(**kwargs)
+        context['add_indicador_form'] = VersionIndicadorForm(initial={'version': self.object})
+        return context
+    
+class VersionIndicadorCreateView(GroupRequiredMixin, LoginRequiredMixin, CreateView):
+    group_required = [u"admin",]
+    model = VersionIndicador
+    form_class = VersionIndicadorForm
+    template_name = 'evaluaciones/version_indicador_add.html'
+
+    def get_success_url(self):
+        return reverse('version_detail', kwargs={'pk':self.object.version.id})
+
 
 # EVALUACION
 class EvaluacionCreateView(GroupRequiredMixin, LoginRequiredMixin, CreateView):

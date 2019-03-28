@@ -2,12 +2,14 @@
 
 from django.urls import path, include
 
-from .views import VersionCreateView, VersionListView, VersionUpdateView, \
+from .views import VersionCreateView, VersionListView, VersionUpdateView, VersionDetailView, VersionIndicadorCreateView, \
 EvaluacionCreateView, EvaluacionListView, EvaluacionUpdateView, DetalleDetailView, EvaluacionPendienteListView, \
 InicioListView, ImprimirDetalleDetailView
 
 urlpatterns = [
     # VERSION
+    path('version/detalle/<int:pk>/', VersionDetailView.as_view(), name='version_detail'),
+    path('version/indicador/add/', VersionIndicadorCreateView.as_view(), name='version_indicador_add'),
     path('version/list/', VersionListView.as_view(), name='version_list'),
     path('version/add/', VersionCreateView.as_view(), name='version_add'),
     path('version/update/<int:pk>/', VersionUpdateView.as_view(), name='version_update'),

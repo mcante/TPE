@@ -2,6 +2,7 @@ from django import forms
 
 from django.forms import ModelForm
 from .models import Version, Evaluacion
+from apps.indicadores.models import VersionIndicador
 
 class VersionForm(forms.ModelForm):
     class Meta:
@@ -11,6 +12,18 @@ class VersionForm(forms.ModelForm):
             'creado': forms.HiddenInput(),
             'actualizado': forms.HiddenInput()
         }
+
+class VersionIndicadorForm(forms.ModelForm):
+    class Meta:
+        model = VersionIndicador
+        fields = '__all__'
+        widgets = {
+            'indicador': forms.Select(attrs={"id":"select2"}),
+            'version': forms.HiddenInput(),
+            'creado': forms.HiddenInput(),
+            'actualizado': forms.HiddenInput()
+        }
+
 
 
 class EvaluacionForm(forms.ModelForm):

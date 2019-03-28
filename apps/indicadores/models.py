@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.evaluaciones.models import Evaluacion
+from apps.evaluaciones.models import Evaluacion, Version
 
 # Create your models here.
 
@@ -30,6 +30,15 @@ class Indicador(ControlCreaciones):
     def __str__(self):
         return '{}: {}'.format(self.nombre, self.area.nombre)
 
+
+class VersionIndicador(ControlCreaciones):
+    version = models.ForeignKey(Version, related_name='rel_version_indicador', on_delete=models.CASCADE)
+    indicador = models.ForeignKey(Indicador, related_name='rel_indicador', on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return '{}: {}'.format(self.version.nombre, self.indicador.nombre)
+
+    
 class Calificacion(ControlCreaciones):
     rango = models.CharField(max_length=150)
     valor = models.PositiveSmallIntegerField(null=True, blank=True)

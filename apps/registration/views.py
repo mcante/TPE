@@ -36,8 +36,8 @@ class PerfilDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
         # Recorrer los 12 meses del año y agregar al contexto concatenando el mes con su respectivo número.
         # Se filtra por medio del empleado instanciado, el año y mes... pero antes se valida que exista el registro sino da error.
         for i in range(1, 13):
-            if( Evaluacion.objects.filter(empleado = self.object.id, fecha__year = hoy.year, fecha__month = i).exists() ):
-                context['mes'+ str(i)] = Evaluacion.objects.get(empleado = self.object.id, fecha__year = hoy.year, fecha__month = i).get_total
+            if( Evaluacion.objects.filter(empleado = self.object.user.id, fecha__year = hoy.year, fecha__month = i).exists() ):
+                context['mes'+ str(i)] = Evaluacion.objects.get(empleado = self.object.user.id, fecha__year = hoy.year, fecha__month = i).get_total
                 print(context['mes'+ str(i)])
         return context
 

@@ -37,7 +37,8 @@
           <ul class="nav child_menu">
             <li><a href="{% url 'perfil_detail' user.usuarios.id %}">Mi Rendimiento</a></li>
             <li><a href="{% url 'perfil_update' user.usuarios.id %}">Editar mi Perfil</a></li>
-            <li><a href="{% url 'evaluacion_list' %}">Mis Evaluaciones</a></li>
+            <li><a href="{% url 'evaluacion_list' %}">Evaluaciones Completadas</a></li>
+            <li><a href="{% url 'evaluacion_pendiente_list' %}">Evaluaciones Pendientes</a></li>
             <li><a href="{% url 'faltas_list' %}">Mis Llamadas de Atención</a></li>
             <li><a href="{% url 'indicador_list' %}">Seguimiento de mejoras</a></li>
           </ul>
