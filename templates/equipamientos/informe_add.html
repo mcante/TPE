@@ -1,18 +1,19 @@
 {% extends "base/base_site.html" %}
 {% load static  %}
 
-{% block title %} NUEVA ENTREGA {% endblock title %}
+{% block title %} INFORME {% endblock title %}
 
 {% block stylesheets %}
 {{ block.super }}
 
+  
 {% endblock stylesheets %}
 
 {% block content %}
 
 <div class="right_col" role="main">
   <!-- top tiles -->
-  <h1>Entrega</h1>
+  <h1>Informe</h1>
   <!-- /top tiles -->
   
   <br />
@@ -21,7 +22,7 @@
     <div class="col-md-6 col-sm-6 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>... <small>datos de la entrega</small></h2>
+          <h2>... <small>datos del informe</small></h2>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -40,7 +41,7 @@
                 {% csrf_token %}
                 {{form.as_table}}	
               </table>
-              <button type="submit" class="btn btn-round btn-primary">Guardar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
           </div>
           
@@ -57,7 +58,6 @@
 {% block javascripts %}
 {{ block.super}}
 
-
 <!-- DateJS -->
 <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
 
@@ -72,9 +72,12 @@
 <script>
   $(document).ready(function() {
 
+    init_select2();
+    init_Switchery();
     init_datapicker();
 
   });
 </script>
+
 
 {% endblock javascripts %}

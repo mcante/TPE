@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Equipamiento, Aspectos, Aspectos_Evaluados, Cambio_Equipo, Dispositivo, Inconvenientes, Producto_Lista, Productos, Productos_Entregados, Valoraciones
+from .models import Equipamiento, Aspectos, Aspectos_Evaluados, Cambio_Equipo, Dispositivo, Inconvenientes, Producto_Lista, Productos, Productos_Entregados, Valoraciones, Informe
 # Register your models here.
 
 admin.site.register(Equipamiento)
@@ -13,3 +13,4 @@ admin.site.register(Producto_Lista)
 admin.site.register(Productos)
 admin.site.register(Productos_Entregados)
 admin.site.register(Valoraciones)
+admin.site.register(Informe)

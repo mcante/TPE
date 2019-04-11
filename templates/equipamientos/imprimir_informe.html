@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        INFORME DE ENTREGA {{object.entrega}}
+    </title>
+</head>
+<meta charset="utf-8" />
+
+<body>
+    
+    <br />
+    <br />
+    <center>
+        <h1>INFORME DE ENTREGA {{object.entrega}}</h1>
+    </center>
+    <br />
+    <br />
+
+
+    <p><strong>Lugar: </strong> {{ object.entrega.destino }}</p>
+    <p><strong>Escuela: </strong> ({{ object.entrega.udi }}) -- {{ object.entrega.institucion }} </p>
+    <p><strong>Técnico: </strong> {{ object.tecnico.first_name }} {{ object.tecnico.last_name }}</p>
+    <p><strong>Entrega: </strong> {{ object.entrega }}</p>
+    <p><strong>Fecha Equipamiento: </strong> {{ object.entrega.fecha }}</p>
+    
+    <hr/>
+    <hr/>
+    <div>
+        {% if object.inconvenientes %}
+            <p ALIGN="left"><strong>INCONVENIENTES </strong></p>
+            <p><strong>Sí, se reporta lo siguiente:</strong></p>
+            <p ALIGN="justify">{{ object.detalle_inconvenientes }}</p>
+        {% else %}
+            <p><strong>No se reportaron inconvenientes.</strong></p>
+        {% endif %}
+    </div>
+
+    <div>
+        <p ALIGN="left"><strong>INFORME GENERAL </strong></p>
+        <p ALIGN="justify">{{ object.informe_general }}</p>
+    </div>
+
+    <div>
+        <p ALIGN="left"><strong>JEFE / SUBJEFE TÉCNICO </strong></p>
+        <p ALIGN="justify">{{ object.observacion_supervisor }}</p>
+    </div>
+
+
+    <p class="despedida">        
+            <div class="pie">
+
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <p><strong>Vo.Bo. </strong> {{ object.supervisor.first_name }} {{ object.supervisor.last_name }}</p>
+        </div>
+    </div>
+   
+    <!--INICIA EL CSS-->
+    <style type="text/css">
+        body{
+            font-size: 11px;
+            font-family: tahoma;
+        }
+        @page{
+            margin-top: 0mm;
+            margin-bottom: 0mm;
+            margin-left: 8mm;
+            margin-right: 10mm;
+        }
+        .encabezado{
+            margin-top: 50px;
+        }
+        .fecha{
+            
+            margin-top: -40px;
+        }
+        .presentacion{
+            margin-top: 40px;
+        }
+        .cuerpo tr:nth-child(odd) {
+            background-color:#9d9fae;
+        }
+        .cuerpo tr:nth-child(even) {
+            background-color:#aeafb5;
+        }
+        .saludo{
+            margin-left: 7mm;
+        }
+        .vobo{
+            margin-left: 20mm;
+        }
+        .despedida{
+            margin-left: 7mm;
+        }
+    </style>
+        <script>
+            window.onload= function () { window.print();window.close();}
+        </script>
+        
+        
+    </body>
+    </html>
+    
+    

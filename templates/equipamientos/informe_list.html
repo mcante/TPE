@@ -1,7 +1,7 @@
 {% extends "base/base_site.html" %}
 {% load static  %}
 
-{% block title %} ENTREGAS {% endblock title %}
+{% block title %} INFORMES {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -21,19 +21,22 @@
 
     
     <br />
-    
-    
-    
-
-    
 
     <div class="row">
 
       <div class="col-md-12 col-sm-4 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
+            <h2><a href="{% url 'informe_add' %}"><img src="{% static 'img/escribiendo.gif' %}" class="img-fluid" height="75" width="100"> Nuevo Informe</a></h2>
             <h2><a href="{% url 'equipamiento_add' %}"><img src="{% static 'img/equipamiento.gif' %}" class="img-fluid" height="75" width="120"> Nuevo Equipamiento</a></h2>
-            
+          </br>
+          </br>
+          </br>
+          </br>
+          </br>
+          </br>
+            <h1>Listado de Informes</h1>
+
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -48,37 +51,50 @@
                     <thead align="center">
                         <tr>
                             <th>Entrega</th>
-                            <th>Fecha</th>
-                            <th>UDI</th>
-                            <th>Institución</th>
-                            <th>Destino</th>
-                            <th>Creado Por</th>
+                            <th>Fecha Reporte</th>
+                            <th>Técnico</th>
+                            <th>Supervisor</th>
+                            <th>Inconvenientes</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
-                            
                         </tr>
                     </thead>
 
                     <tbody>
                         {% if object_list %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
-                        {% for equipamiento in object_list %}
+                        {% for informe in object_list %}
                           
                                 <tr>
-                                    <td>{{equipamiento.entrega}}</td>
-                                    <td>{{equipamiento.fecha}}</td>
-                                    <td>{{equipamiento.udi}}</td>  
-                                    <td>{{equipamiento.institucion}}</td>                                  
-                                    <td>{{equipamiento.destino}}</td>                                    
-                                    <td>{{equipamiento.creado_por.first_name}} {{equipamiento.creado_por.last_name}}</td>
+                                    <td><a href="{% url 'equipamiento_update' informe.entrega.id %}"> {{informe.entrega}} </a></td>
+                                    <td>{{informe.fecha_reporte}}</td>
+                                    <td>{{informe.tecnico.first_name}} {{informe.tecnico.last_name}}</td>
+                                    <td>{{informe.supervisor.first_name}} {{informe.supervisor.last_name}}</td>
+                                    <td> 
+                                        {% if informe.inconvenientes %}  
+                                          <span class="label label-danger"> Sí </span>
+                                        {% else %}
+                                            <span class="label label-success"> No </span>
+                                        {% endif %}
+                                    </td>                                    
+                                      
                                     <td>
-                                      {% if equipamiento.creado_por.id is user.id or user.is_superuser %}
-                                        <a class="btn btn-xs btn-warning" href="{% url 'equipamiento_update' equipamiento.id %}">Editar</a>
+                                        {% if informe.cerrar_informe is False %}  
+                                          <span class="label label-danger"> Abierto </span>
+                                        {% else %}
+                                            <span class="label label-success"> Cerrado </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                      {% if informe.cerrar_informe is False %}
+                                        <a class="btn btn-xs btn-warning" href="{% url 'informe_update' informe.id %}">Editar</a>
                                       {% endif %}
+                                      <a class="btn btn-xs btn-primary" href="{% url 'informe_print' informe.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
                                     </td>
                                 </tr>
                             
                         {% endfor %}
                         {% else %}
-                        <h1>No hay registros de equipamientoes</h1>
+                        <h1>No hay registros de informes</h1>
                         {% endif %}	
                     </tbody>
                     <tfoot>
@@ -170,7 +186,7 @@
                 },
                 //responsive: true // No permitir que la tabla resultante sea responsive
                 //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
-                "order": [[ 0, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 0
+                "order": [[ 1, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 1
             });
          
             // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.

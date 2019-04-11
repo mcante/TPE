@@ -23,7 +23,9 @@ class ControlCreaciones(models.Model):
 class Equipamiento(ControlCreaciones):
     entrega = models.CharField(max_length=10, null=True, blank=True)
     udi = models.CharField(max_length=15, null=True, blank=True)
+    institucion = models.CharField(max_length=250, null=True, blank=True)
     destino = models.CharField(max_length=250, null=True, blank=True)
+    fecha = models.DateField(default=datetime.datetime.now, null=True, blank=True)
     latitud = models.CharField(max_length=25, null=True, blank=True)
     longitud = models.CharField(max_length=25, null=True, blank=True)
     creado_por = models.ForeignKey(User, related_name='rel_Equipamiento_User', on_delete=models.CASCADE, null=True, blank=True)
@@ -121,3 +123,21 @@ class Aspectos_Evaluados(models.Model):
 
     def __str__(self):
         return 'Inconveniente: {}, Aspecto: {}'.format(self.inconveniente, self.aspecto)
+
+
+# HOJA GENERAL DE INFORMES DE EQUIPAMEINTO
+class Informe(ControlCreaciones):
+    entrega = models.ForeignKey(Equipamiento, related_name='relInformeEquipamiento', on_delete=models.CASCADE)
+    fecha_reporte = models.DateField(default=datetime.datetime.now, null=True, blank=True)
+    tecnico = models.ForeignKey(User, related_name='relInformeTecnicoUser', on_delete=models.CASCADE, null=True, blank=True)
+    supervisor = models.ForeignKey(User, related_name='relInformeSupervisorUser', on_delete=models.CASCADE, null=True, blank=True)
+    detalle_inconvenientes = models.TextField(null=True, blank=True)
+    informe_general = models.TextField(null=True, blank=True)
+    observacion_supervisor = models.TextField(null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    inconvenientes = models.BooleanField(default=False)
+    creado_por = models.ForeignKey(User, related_name='relInformeUser', on_delete=models.CASCADE, null=True, blank=True)
+    cerrar_informe = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Entrega: {}, Técnico: {}'.format(self.entrega, self.tecnico)
