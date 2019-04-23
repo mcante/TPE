@@ -22,10 +22,14 @@
   <div class="right_col" role="main">
     <!-- top tiles -->
     
-    <a class="btn btn-round btn-warning" href="{% url 'programaciones_pendientes_list' %}"><i class="fa fa-reply"></i> Listar Planificaciones</a>
+    {% if object.cerrado %}
+        <a class="btn btn-round btn-warning" href="{% url 'programaciones_list' %}"><i class="fa fa-reply"></i> Listar Planificaciones</a>
+    {% else %}
+        <a class="btn btn-round btn-warning" href="{% url 'programaciones_pendientes_list' %}"><i class="fa fa-reply"></i> Listar Planificaciones</a>
+    {% endif %}
     {% if user.is_superuser %} 
         <a class="btn btn-round btn-primary" href="{% url 'programacion_update' object.id %}">Editar</a>
-        <a class="btn btn-round btn-info" href="{% url 'imprimir_equipo_asignado_detail' object.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
+        <a class="btn btn-round btn-info" href="{% url 'programacion_imprimir' object.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
     {% endif %}
     <!-- /top tiles -->
     
@@ -338,7 +342,7 @@ $("#dataTables").DataTable({
                 pagingType: "full_numbers",
                 //responsive: true // No permitir que la tabla resultante sea responsive
                 //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
-                order: [[ 0, "asc" ]] // Indicar que se desea ordenar ascendentemente la columna 0
+                order: [[ 0, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 0
             });
          
             // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.

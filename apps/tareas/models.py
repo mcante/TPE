@@ -162,5 +162,8 @@ class AnotacionesTarea(ControlCreaciones):
     apunte = models.TextField(null=True, blank=True)
     fecha_hora_anotacion = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
     
-
+    def __str__(self):
+        fecha_anotacion = self.fecha_hora_anotacion.replace(tzinfo=None)
+        cadena = str(fecha_anotacion.hour) + ":" + str(fecha_anotacion.minute)
+        return '{}|{}|: {}'.format(self.fecha_hora_anotacion.strftime("%d/%m/%Y"), cadena, self.apunte)
     

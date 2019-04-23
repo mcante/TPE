@@ -67,7 +67,16 @@ class ProgramacionesDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailVie
         return context
 
 
+class ImprimirProgramacionDetailView(GroupRequiredMixin, LoginRequiredMixin, DetailView):
+    group_required = [u"admin", u"Tecnicos", u"Supervisores"]
+    model = Programaciones
+    template_name = 'tareas/imprimir_programacion.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ImprimirProgramacionDetailView, self).get_context_data(**kwargs)
+        context['tareas'] = Tareas.objects.filter(programacion = self.object.id).order_by('fecha_hora_inicio')
+        
+        return context
 
 # TAREAS
 class TareasListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
