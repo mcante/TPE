@@ -29,8 +29,8 @@
     {% endif %}
     {% if user.is_superuser %} 
         <a class="btn btn-round btn-primary" href="{% url 'programacion_update' object.id %}">Editar</a>
-        <a class="btn btn-round btn-info" href="{% url 'programacion_imprimir' object.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
     {% endif %}
+        <a class="btn btn-round btn-info" href="{% url 'programacion_imprimir' object.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
     <!-- /top tiles -->
     
 

@@ -11,7 +11,11 @@
   <div class="right_col" role="main">
     <!-- top tiles -->
     <h1>Evaluación</h1>
-    <a class="btn btn-round btn-warning" href="{% url 'evaluacion_list' %}"><i class="fa fa-reply"></i> Listar evaluaciones</a>
+    {% if object.completado %} 
+        <a class="btn btn-round btn-warning" href="{% url 'evaluacion_list' %}"><i class="fa fa-reply"></i> Listar evaluaciones</a>
+    {% else %} 
+        <a class="btn btn-round btn-warning" href="{% url 'evaluacion_pendiente_list' %}"><i class="fa fa-reply"></i> Listar evaluaciones</a>
+    {% endif %}
     <!-- /top tiles -->
     
     
