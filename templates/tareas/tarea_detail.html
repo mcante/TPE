@@ -142,7 +142,7 @@
                         {% if object %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
                         {% for task in object.rel_AnotacionesTarea_Tareas.all %}
                         <tr>
-                            <td>{{ task.apunte }}</td>
+                            <td>{{ task.apunte|linebreaksbr }}</td>
                             <td>{{ task.fecha_hora_anotacion|date:"SHORT_DATETIME_FORMAT" }}</td>
                         </tr>
                         {% endfor %}

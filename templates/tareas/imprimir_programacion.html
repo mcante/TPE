@@ -69,7 +69,7 @@
                     <td>{{ task.estado }}</td>
                     <td>
                         {% for anotacion in task.rel_AnotacionesTarea_Tareas.all %}
-                            {{ anotacion }}
+                            {{ anotacion|linebreaks }}
                             <br>
                         {% endfor %}
                     </td>

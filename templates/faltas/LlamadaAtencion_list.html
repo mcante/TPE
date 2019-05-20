@@ -62,7 +62,7 @@
                                 <tr>
                                     <td><a href="{% url 'perfil_detail' falta.empleado.id %}">{{falta.empleado.first_name}} {{falta.empleado.last_name}}</a></td>
                                     <td>{{falta.fecha}}</td>
-                                    <td>{{falta.motivo }}</td>
+                                    <td>{{falta.motivo|linebreaksbr }}</td>
                                     <td>{% if falta.penalizacion %}Sí{% else %}No{% endif %}</td>
                                     <td>
                                         {% for levantada in falta.levantada_por.all %}
@@ -70,7 +70,7 @@
                                         {% endfor %}
                                     </td>
                                     <td>{{ falta.tiempo }}</td>
-                                    <td>{{ falta.compromiso }}</td>
+                                    <td>{{ falta.compromiso|linebreaksbr }}</td>
                                     
                                     <td>
                                         <a class="btn btn-round btn-warning" href="{% url 'faltas_update' falta.id %}">Editar</a>

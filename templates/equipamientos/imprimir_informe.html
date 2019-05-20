@@ -30,7 +30,7 @@
         {% if object.inconvenientes %}
             <p ALIGN="left"><strong>INCONVENIENTES </strong></p>
             <p><strong>Sí, se reporta lo siguiente:</strong></p>
-            <p ALIGN="justify">{{ object.detalle_inconvenientes }}</p>
+            <p ALIGN="justify">{{ object.detalle_inconvenientes|linebreaksbr }}</p>
         {% else %}
             <p><strong>No se reportaron inconvenientes.</strong></p>
         {% endif %}
@@ -38,12 +38,12 @@
 
     <div>
         <p ALIGN="left"><strong>INFORME GENERAL </strong></p>
-        <p ALIGN="justify">{{ object.informe_general }}</p>
+        <p ALIGN="justify">{{ object.informe_general|linebreaksbr }}</p>
     </div>
 
     <div>
         <p ALIGN="left"><strong>JEFE / SUBJEFE TÉCNICO </strong></p>
-        <p ALIGN="justify">{{ object.observacion_supervisor }}</p>
+        <p ALIGN="justify">{{ object.observacion_supervisor|linebreaksbr }}</p>
     </div>
 
 

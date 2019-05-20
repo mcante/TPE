@@ -55,7 +55,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Descripción:</strong></td>
-                                <td>{{ object.descripcion }}</td>
+                                <td>{{ object.descripcion|linebreaksbr }}</td>
                             </tr>
                             
                             <tr>
@@ -137,7 +137,7 @@
                             <td>{{ dtasignado.tipo_equipo }}</td>
                             <td>{{ dtasignado.cantidad }}</td>
                             <td>{{ dtasignado.identificador }}</td>
-                            <td>{{ dtasignado.descripcion }}</td>
+                            <td>{{ dtasignado.descripcion|linebreaksbr }}</td>
                             
                             <td>
                                 {% if dtasignado.id %}

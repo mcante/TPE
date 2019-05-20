@@ -61,8 +61,8 @@
                 <tr>
                     <td>{{ indicador.indicador }}</td>
                     <td>{{ indicador.calificacion }}</td>
-                    <td>{% if indicador.observaciones_encargado %} {{ indicador.observaciones_encargado }} {% else %} Ninguno {% endif %}</td>
-                    <td>{% if indicador.compromiso_del_evaluado %} {{ indicador.compromiso_del_evaluado }} {% else %} Ninguno {% endif %}</td>
+                    <td>{% if indicador.observaciones_encargado %} {{ indicador.observaciones_encargado|linebreaksbr }} {% else %} Ninguno {% endif %}</td>
+                    <td>{% if indicador.compromiso_del_evaluado %} {{ indicador.compromiso_del_evaluado|linebreaksbr }} {% else %} Ninguno {% endif %}</td>
                     
                 </tr>
                 {% endfor %}
@@ -77,7 +77,7 @@
     <p><strong>Resultado: </strong> {{ object.get_total }}%</p>
     <p><strong>Penalizado: </strong> {% if object.penalizado %} Sí {% else %} No {% endif %}</p>
     <p><strong>Incentivo a recibir: </strong> Q.{{ object.get_incentivo }}</p>
-    <p><strong>Aspectos a Mejorar: </strong> {% if object.aspectos_por_mejorar %} {{ object.aspectos_por_mejorar }} {% else %} No hay aspectos específicos que mejorar. {% endif %}</p>
+    <p><strong>Aspectos a Mejorar: </strong> {% if object.aspectos_por_mejorar %} {{ object.aspectos_por_mejorar|linebreaksbr }} {% else %} No hay aspectos específicos que mejorar. {% endif %}</p>
     
     
     

@@ -68,7 +68,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Aspectos a Mejorar:</strong></td>
-                                <td>{{ object.aspectos_por_mejorar }}</td>
+                                <td>{{ object.aspectos_por_mejorar|linebreaksbr }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Completado:</strong></td>
@@ -162,11 +162,11 @@
                             <td>{{ indicador.indicador }}</td>
                             <td>{{ indicador.calificacion }}</td>
                             <td> {% if indicador.observaciones_encargado %}
-                                    {{ indicador.observaciones_encargado }}
+                                    {{ indicador.observaciones_encargado|linebreaksbr }}
                                 {% endif %}
                             </td>
                             <td> {% if indicador.compromiso_del_evaluado %}
-                                    {{ indicador.compromiso_del_evaluado }}
+                                    {{ indicador.compromiso_del_evaluado|linebreaksbr }}
                                 {% endif %}
                             </td>
                             <td>{% if indicador.debe_mejorar %} Sí {% else %} No {% endif %} </td>
