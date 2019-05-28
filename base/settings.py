@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apps.equipamientos',
     'apps.rutas',
     'apps.tareas',
+    'apps.supervision',
     
 ]
 

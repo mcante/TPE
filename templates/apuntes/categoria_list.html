@@ -62,7 +62,7 @@
                         {% for categoria in categoria %}
                           
                                 <tr>
-                                    <td>{{categoria.fecha}}</td>
+                                    <td>{{categoria.fecha|date:"SHORT_DATE_FORMAT"}}</td>
                                     <td>{{categoria.nombre}}</td>                                    
                                     <td>{{categoria.descripcion}}</td>                                    
                                     <td>{{categoria.creado_por.first_name}} {{categoria.creado_por.last_name}}</td>

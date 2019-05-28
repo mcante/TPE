@@ -64,7 +64,7 @@
                           
                                 <tr>
                                     <td>{{equipamiento.entrega}}</td>
-                                    <td>{{equipamiento.fecha}}</td>
+                                    <td>{{equipamiento.fecha|date:"SHORT_DATE_FORMAT"}}</td>
                                     <td>{{equipamiento.udi}}</td>  
                                     <td>{{equipamiento.institucion}}</td>                                  
                                     <td>{{equipamiento.destino}}</td>                                    
@@ -170,7 +170,7 @@
                 },
                 //responsive: true // No permitir que la tabla resultante sea responsive
                 //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
-                "order": [[ 0, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 0
+                "order": [[ 1, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 0
             });
          
             // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.

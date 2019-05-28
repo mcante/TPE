@@ -1,7 +1,7 @@
 {% extends "base/base_site.html" %}
 {% load static  %}
 
-{% block title %} PLANIFICACIONES {% endblock title %}
+{% block title %} MOVIMIENTOS {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -16,22 +16,27 @@
 {% block content %}
   <div class="right_col" role="main">
     <!-- top tiles -->
-    <h1>Planificaciones Completadas</h1>
+    
     <!-- /top tiles -->
 
     
     <br />
-    {% if user.is_superuser %}
-        <a class="btn btn-round btn-info" href="{% url 'programacion_add' %}">Agregar Planificación</a>
-    {% endif %}
 
     <div class="row">
 
       <div class="col-md-12 col-sm-4 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Lista</h2>
-            
+            <h2><a href="{% url 'movimiento_add' %}"><img src="{% static 'img/evaluacion.gif' %}" class="img-fluid" height="75" width="100"> Nuevo Movimiento</a></h2>
+          </br>
+          </br>
+          </br>
+          </br>
+          </br>
+          </br>
+            <h1>Listado de Movimientos</h1>
+        
+
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -42,42 +47,75 @@
           </div>
           <div class="box-body table-responsive">
             <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
-                <table width="100%" class="table table-condensed table-striped table-hover" id="dataTables" >
+                <table width="100%" class="table display table-striped table-hover" id="dataTables" >
                     <thead align="center">
                         <tr>
+                            <th>Movimiento</th>
                             <th>Fecha</th>
-                            <th>Mes</th>
-                            <th>Supervisor</th>
-                            <th>Técnico</th>
+                            <th>Tipo</th>
+                            <th>Entrega</th>
+                            <th>Recibe</th>
+                            <th>Afecta Kardex</th>
+                            <th>Supervisado Por</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
-
                     </thead>
 
                     <tbody>
                         {% if object_list %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
-                        {% for programacion in cerrados %}
-                            {% if programacion.supervisor.id is user.id or programacion.tecnico.id is user.id or user.is_superuser %} <!-- Solo permite mostrar las programaciones del usuario logeado y si es super usuario muetra todo. -->
+                        {% for movimiento in object_list %}
+                          
                                 <tr>
-                                    <td>{{programacion.fecha|date:"SHORT_DATE_FORMAT"}}</td>
-                                    <td>{{programacion.mes}}</td>
-                                    <td>{{programacion.supervisor.first_name}} {{programacion.supervisor.last_name}}</td>
-                                    <td>{{programacion.tecnico.first_name}} {{programacion.tecnico.last_name}}</td>
-                                    <td>{% if programacion.cerrado %} <span class="label label-success">Terminado</span> {% else %} <span class="label label-warning">En proceso</span> {% endif %}</td>
+                                    <td><a href="https://suni.funsepa.org/i/dispositivo/solicitudmovimiento/{{ movimiento.movimiento }}/" target="_blank"> {{movimiento.movimiento}} </a></td>
+                                    <td>{{movimiento.fecha|date:"SHORT_DATE_FORMAT"}}</td>
+                                    <td>
+                                        {% if movimiento.tipo.id == 2 %}
+                                            {% if movimiento.desecho %}
+                                                {{movimiento.tipo}} / Desecho
+                                            {% else %}
+                                                {{movimiento.tipo}} / Útil
+                                            {% endif %}
+                                        {% else %}
+                                            {{movimiento.tipo}}
+                                        {% endif %}
+                                    </td>
+
+
+                                    <td>{{movimiento.entrega.first_name}} {{movimiento.entrega.last_name}}</td>
+                                    <td>{{movimiento.recibe.first_name}} {{movimiento.recibe.last_name}}</td>
+                                    <td> 
+                                        {% if movimiento.genera_kardex %}
+                                        {% if movimiento.tipo.id == 1 %}
+                                            <a href="https://suni.funsepa.org/kardex/salida/{{ movimiento.kardex }}/" target="_blank"> <span class="label label-success"> Sí, Salida #{{ movimiento.kardex }} </span> </a>
+                                        {% else %}
+                                            <a href="https://suni.funsepa.org/kardex/entrada/{{ movimiento.kardex }}/" target="_blank"> <span class="label label-success"> Sí, Entrada #{{ movimiento.kardex }} </span> </a>
+                                        {% endif %}
+                                            
+                                        {% else %}
+                                            <span class="label label-success"> No </span>
+                                        {% endif %}
+                                        </td> 
+                                    <td>{{movimiento.supervisado_por.first_name}} {{movimiento.supervisado_por.last_name}}</td>
                                     
                                     <td>
-                                        <a class="btn btn-xs btn-success" href="{% url 'programacion_detail' programacion.id %}">Ver Planificación</a>
-                                        {% if user.is_superuser %}
-                                        <a class="btn btn-xs btn-warning" href="{% url 'programacion_update' programacion.id %}">Editar</a>
+                                        {% if movimiento.supervision_completada is False %}  
+                                          <span class="label label-danger"> En Proceso </span>
+                                        {% else %}
+                                            <span class="label label-success"> Completado </span>
                                         {% endif %}
-                                        
+                                    </td>
+                                    <td>
+                                      {% if movimiento.supervision_completada is False %}
+                                        <a class="btn btn-xs btn-warning" href="{% url 'movimiento_update' movimiento.id %}">Editar</a>
+                                      {% endif %}
+                                      <a class="btn btn-xs btn-primary" href="{% url 'informe_print' movimiento.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
                                     </td>
                                 </tr>
-                            {% endif %}	
+                            
                         {% endfor %}
                         {% else %}
-                        <h1>No hay registros de evaluaciones</h1>
+                        <h1>No hay registros de informes</h1>
                         {% endif %}	
                     </tbody>
                     <tfoot>
@@ -86,30 +124,16 @@
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
-                      <th><input type="text" placeholder="Acción"/></th>
+                      <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Buscar"/></th>
                     </tfoot>
                 </table>
           </div>
         </div>
       </div>
-
-
-      <div class="col-md-4 col-sm-4 col-xs-12">
-      <!-- Aquí se puede agregar información -->
-      </div>
-
     </div>
-
-
-    <div class="row">
-      <div class="col-md-8 col-sm-8 col-xs-12">
-        <div class="row">
-          <!-- End to do list -->
-
-        </div>
-      </div>
-    </div>
-
 
   </div>
 {% endblock content %}
@@ -139,7 +163,7 @@
 
         //Función de DataTable para establecer sus parámetros
         $("#dataTables").DataTable({
-          dom: "Blfrtip",
+          dom: "Bfrtip",
                 buttons: [{
                     extend: "copy",
                     className: "btn-sm"
@@ -183,11 +207,9 @@
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
-                paging: true,
-                pagingType: "full_numbers",
                 //responsive: true // No permitir que la tabla resultante sea responsive
                 //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
-                "order": [[ 0, "asc" ]] // Indicar que se desea ordenar descendentemente la columna 1
+                "order": [[ 0, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 1
             });
          
             // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.
@@ -210,3 +232,4 @@
     });
     </script> 
 {% endblock javascripts %}
+

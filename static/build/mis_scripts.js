@@ -120,6 +120,14 @@ function init_select2() {
         width: '75%',
         containerCssClass: ':all:'
     });
+
+    $("#select2_3").select2({
+        theme: "bootstrap",
+        placeholder: " ---------Seleccionar---------",
+        allowClear: true,
+        width: '75%',
+        containerCssClass: ':all:'
+    });
     
     // Campo Select2, para mostrar combobox multiple
     $("#multiSelect2").select2({

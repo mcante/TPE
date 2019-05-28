@@ -51,6 +51,7 @@
                     <thead align="center">
                         <tr>
                             <th>Entrega</th>
+                            <th>Fecha Equipamiento</th>
                             <th>Fecha Reporte</th>
                             <th>Técnico</th>
                             <th>Supervisor</th>
@@ -66,7 +67,8 @@
                           
                                 <tr>
                                     <td><a href="{% url 'equipamiento_update' informe.entrega.id %}"> {{informe.entrega}} </a></td>
-                                    <td>{{informe.fecha_reporte}}</td>
+                                    <td>{{informe.entrega.fecha|date:"SHORT_DATE_FORMAT"}}</td>
+                                    <td>{{informe.fecha_reporte|date:"SHORT_DATE_FORMAT"}}</td>
                                     <td>{{informe.tecnico.first_name}} {{informe.tecnico.last_name}}</td>
                                     <td>{{informe.supervisor.first_name}} {{informe.supervisor.last_name}}</td>
                                     <td> 
@@ -98,6 +100,7 @@
                         {% endif %}	
                     </tbody>
                     <tfoot>
+                      <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
