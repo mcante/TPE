@@ -123,21 +123,21 @@
         estado = false;
       }
       
-      // Verifica que la hoja ya esté impresa.
-      if(!HojaImpresa){
-        alert("No hay hoja impresa!!");
-        estado = false;
-      }
-
       // Verifica genera número de Kardex.
       if(GeneraKardex){
+
+        // Verifica que la hoja ya esté impresa.
+        if(!HojaImpresa){
+          alert("No hay hoja impresa!!");
+          estado = false;
+        }
         
         // Verifica que existe un número ingresado en la casilla.
         if($.trim(NumeroKardex).length>0){
-        }else{
-			alert("Llene el campo de No. Kardex!!");
+          }else{
+        alert("Llene el campo de No. Kardex!!");
           	estado = false;
-		}
+		    }
       }
 
       // Verifica que ya se haya registrado todo en correo electrónico.

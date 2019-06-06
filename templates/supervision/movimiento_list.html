@@ -108,8 +108,9 @@
                                     <td>
                                       {% if movimiento.supervision_completada is False %}
                                         <a class="btn btn-xs btn-warning" href="{% url 'movimiento_update' movimiento.id %}">Editar</a>
+                                      {% else %}
+                                        <span class="label label-danger"> Cerrado </span>
                                       {% endif %}
-                                      <a class="btn btn-xs btn-primary" href="{% url 'informe_print' movimiento.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
                                     </td>
                                 </tr>
                             
@@ -128,6 +129,7 @@
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Opciones"/></th>
                     </tfoot>
                 </table>
           </div>
