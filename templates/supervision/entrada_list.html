@@ -1,7 +1,7 @@
 {% extends "base/base_site.html" %}
 {% load static  %}
 
-{% block title %} MOVIMIENTOS {% endblock title %}
+{% block title %} ENTRADAS {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -27,14 +27,14 @@
       <div class="col-md-12 col-sm-4 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2><a href="{% url 'movimiento_add' %}"><img src="{% static 'img/evaluacion.gif' %}" class="img-fluid" height="75" width="100"> Nuevo Movimiento</a></h2>
+            <h2><a href="{% url 'entrada_add' %}"><img src="{% static 'img/evaluacion.gif' %}" class="img-fluid" height="75" width="100"> Nueva Entrada</a></h2>
           </br>
           </br>
           </br>
           </br>
           </br>
           </br>
-            <h1>Listado de Movimientos</h1>
+            <h1>Listado de Entradas Depuradas</h1>
         
 
             <ul class="nav navbar-right panel_toolbox">
@@ -47,16 +47,15 @@
           </div>
           <div class="box-body table-responsive">
             <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
-                <table width="100%" class="table display table-striped table-hover" id="dataTables" >
+                <table width="100%" class="table display table-striped table-hover table-condensed" id="dataTables" >
                     <thead align="center">
                         <tr>
-                            <th>Movimiento</th>
-                            <th>Fecha</th>
-                            <th>Tipo</th>
-                            <th>Dispositivo</th>
+                            <th>Entrada</th>
+                            <th>Fecha Depuración</th>
                             <th>Entrega</th>
                             <th>Recibe</th>
-                            <th>Afecta Kardex</th>
+                            <th>Kardex</th>
+                            <th>Equipo</th>
                             <th>Supervisado Por</th>
                             <th>Estado</th>
                             <th>Acciones</th>
@@ -65,51 +64,36 @@
 
                     <tbody>
                         {% if object_list %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
-                        {% for movimiento in object_list %}
+                        {% for entrada in object_list %}
                           
                                 <tr>
-                                    <td><a href="https://suni.funsepa.org/i/dispositivo/solicitudmovimiento/{{ movimiento.movimiento }}/" target="_blank"> {{movimiento.movimiento}} </a></td>
-                                    <td>{{movimiento.fecha|date:"SHORT_DATE_FORMAT"}}</td>
-                                    <td>
-                                        {% if movimiento.tipo.id == 2 %}
-                                            {% if movimiento.desecho %}
-                                                {{movimiento.tipo}} / Desecho
-                                            {% else %}
-                                                {{movimiento.tipo}} / Útil
-                                            {% endif %}
-                                        {% else %}
-                                            {{movimiento.tipo}}
-                                        {% endif %}
-                                    </td>
-                                    <td>{{movimiento.dispositivo}}</td>
-                                    <td>{{movimiento.entrega.first_name}} {{movimiento.entrega.last_name}}</td>
-                                    <td>{{movimiento.recibe.first_name}} {{movimiento.recibe.last_name}}</td>
-                                    <td> 
-                                        {% if movimiento.genera_kardex %}
-                                        {% if movimiento.tipo.id == 1 %}
-                                            <a href="https://suni.funsepa.org/kardex/salida/{{ movimiento.kardex }}/" target="_blank"> <span class="label label-success"> Sí, Salida #{{ movimiento.kardex }} </span> </a>
-                                        {% else %}
-                                            <a href="https://suni.funsepa.org/kardex/entrada/{{ movimiento.kardex }}/" target="_blank"> <span class="label label-success"> Sí, Entrada #{{ movimiento.kardex }} </span> </a>
-                                        {% endif %}
-                                            
-                                        {% else %}
-                                            <span class="label label-success"> No </span>
-                                        {% endif %}
-                                        </td> 
-                                    <td>{{movimiento.supervisado_por.first_name}} {{movimiento.supervisado_por.last_name}}</td>
+                                    <td><a href="https://suni.funsepa.org/i/entrada/{{ entrada.entrada }}/" target="_blank"> {{entrada.entrada}} </a></td>
+                                    <td>{{entrada.fecha|date:"SHORT_DATE_FORMAT"}}</td>
+                                    <td>{{entrada.entrega.first_name}} {{entrada.entrega.last_name}}</td>
+                                    <td>{{entrada.recibe.first_name}} {{entrada.recibe.last_name}}</td>
+                                    <td><a href="https://suni.funsepa.org/kardex/entrada/{{ entrada.kardex }}/" target="_blank"> <span class="label label-success"> Entrada #{{ entrada.kardex }} </span> </a></td> 
                                     
                                     <td>
-                                        {% if movimiento.supervision_completada is False %}  
+                                      {% for detalle in entrada.relDepuracionEntrada.all %}
+                                        {{ detalle }}
+                                        <P>_________________</P>
+                                      {% endfor %}
+                                      
+                                    </td>
+
+                                    <td>{{entrada.supervisado_por.first_name}} {{entrada.supervisado_por.last_name}}</td>
+                                    <td>
+                                        {% if entrada.cerrar is False %}  
                                           <span class="label label-danger"> En Proceso </span>
                                         {% else %}
                                             <span class="label label-success"> Completado </span>
                                         {% endif %}
                                     </td>
                                     <td>
-                                      {% if movimiento.supervision_completada is False %}
-                                        <a class="btn btn-xs btn-warning" href="{% url 'movimiento_update' movimiento.id %}">Editar</a>
+                                      {% if entrada.cerrar is False %}
+                                        <a class="btn btn-xs btn-warning" href="{% url 'entrada_update' entrada.id %}">Editar</a>
                                       {% endif %}
-                                      <a class="btn btn-xs btn-primary" href="{% url 'informe_print' movimiento.id %}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
+                                      <a class="btn btn-xs btn-success" href="{% url 'entrada_detail' entrada.id %}">Detalle</a>
                                     </td>
                                 </tr>
                             
@@ -127,7 +111,7 @@
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
                       <th><input type="text" placeholder="Buscar"/></th>
-                      <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Opciones"/></th>
                     </tfoot>
                 </table>
           </div>

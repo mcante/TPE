@@ -1,7 +1,7 @@
 {% extends "base/base_site.html" %}
 {% load static  %}
 
-{% block title %} NUEVO MOVIMIENTO {% endblock title %}
+{% block title %} NUEVA ENTRADA {% endblock title %}
 
 {% block stylesheets %}
 {{ block.super }}
@@ -12,13 +12,10 @@
 
 <div class="right_col" role="main">
   <!-- top tiles -->
-  <h1>Movimiento
+  <h1>Entrada
       {% if object.id %}
-         #{{ object.movimiento }}
+         #{{ object.entrada }}
       {% endif %}
-
-
-
   </h1>
   <!-- /top tiles -->
   
@@ -28,7 +25,7 @@
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>... <small>datos del movimiento</small></h2>
+          <h2>... <small>datos de la entrada</small></h2>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -41,11 +38,11 @@
           <br />
 
         {% if object.id %}
-            {% if object.supervision_completada is False %}
+            {% if object.cerrar is False %}
           
                 <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
                 <div class="box-body  table-responsive">
-                    <form method="post" action="" class="form-horizontal form-label-left" id="movimiento-form" onSubmit="return validacion()">
+                    <form method="post" action="" class="form-horizontal form-label-left" id="entrada-form" onSubmit="return validacion()">
                     <table class="table table-striped table-hover table-condensed">
                         {% csrf_token %}
                         {{form.as_table}}	
@@ -54,12 +51,12 @@
                     </form>
                 </div>
             {% else %}
-                <h3>El movimiento está completo</h3>
+                <h3>La entrada está cerrada</h3>
             {% endif %}
         {% else %}
             <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
             <div class="box-body  table-responsive">
-                <form method="post" action="" class="form-horizontal form-label-left" id="movimiento-form" onSubmit="return validacion()">
+                <form method="post" action="" class="form-horizontal form-label-left" id="entrada-form" onSubmit="return validacion()">
                 <table class="table table-striped table-hover table-condensed">
                     {% csrf_token %}
                     {{form.as_table}}	
@@ -104,10 +101,9 @@
     // VALIDACIÓN DEL FORMULARIO
     function validacion() {
 
-      var completado = $("#id_supervision_completada").is(":checked");
+      var Cerrar = $("#id_cerrar").is(":checked");
       var CreadoEnSuni = $("#id_creado_en_suni").is(":checked");
       var HojaImpresa = $("#id_hoja_impresa").is(":checked");
-      var GeneraKardex = $("#id_genera_kardex").is(":checked");
       var RegistroCorreo = $("#id_registro_en_correo").is(":checked");
       var NumeroKardex = document.getElementById("id_kardex").value;
       
@@ -116,7 +112,7 @@
 
 
     // Sí marca el check de Supervisión completada, se realizará una serie de validaciones.
-    if(completado){
+    if(Cerrar){
       // Verifica que ya se haya creado en SUNI.
       if(!CreadoEnSuni){
         alert("Aún no está ingresado en SUNI...");
@@ -129,16 +125,14 @@
         estado = false;
       }
 
-      // Verifica genera número de Kardex.
-      if(GeneraKardex){
-        
-        // Verifica que existe un número ingresado en la casilla.
-        if($.trim(NumeroKardex).length>0){
-        }else{
-			alert("Llene el campo de No. Kardex!!");
-          	estado = false;
-		}
-      }
+
+    // Verifica que existe un número ingresado en la casilla.
+    if($.trim(NumeroKardex).length>0){
+    }else{
+		alert("Llene el campo de No. Kardex!!");
+        estado = false;
+	}
+      
 
       // Verifica que ya se haya registrado todo en correo electrónico.
       if(!RegistroCorreo){
@@ -151,7 +145,6 @@
 };
 
 
-
 </script>
 
 <script>
@@ -162,7 +155,8 @@
     init_datapicker();
 
   });
-
+    
 </script>
+
 
 {% endblock javascripts %}

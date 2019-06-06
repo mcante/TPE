@@ -1,0 +1,300 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} DETALLE ENTRADA {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1><a href="https://suni.funsepa.org/i/entrada/{{ object.entrada }}/" target="_blank"> <span class="label label-danger"> Detalle de Entrada #{{ object.entrada }} </span> </a></h1>
+    
+        <a class="btn btn-round btn-warning" href="{% url 'entrada_list' %}"><i class="fa fa-reply"></i> Listar entradas</a>
+    
+    <!-- /top tiles -->
+    
+    
+
+
+{# PEDIDO #}
+<div class="row">
+    <div class="col-md-5 col-sm-6 col-xs-12">
+        <div class="table-responsive">
+            
+            <div class="row">
+                <div class="col-sm-10">
+                    <table class="table nowrap table-striped table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Fecha:</strong></td>
+                                <td>{{ object.fecha }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Entrega:</strong></td>
+                                <td>{{ object.entrega.first_name }} {{ object.entrega.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Recibe:</strong></td>
+                                <td>{{ object.recibe.first_name }} {{ object.recibe.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Creado en SUNI:</strong></td>
+                                <td>{% if object.creado_en_suni %} Sí {% else %} No {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hoja Impresa:</strong></td>
+                                <td>{% if object.hoja_impresa %} Sí {% else %} No {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Registro en Correo:</strong></td>
+                                <td>{% if object.registro_en_correo %} Sí {% else %} No {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kardex:</strong></td>
+                                <td><a href="https://suni.funsepa.org/kardex/entrada/{{ object.kardex }}/" target="_blank"> <span class="label label-success"> Entrada #{{ object.kardex }} </span> </a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Observaciones:</strong></td>
+                                <td>{{ object.observaciones|linebreaksbr }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cerrado:</strong></td>
+                                <td>
+                                        {% if object.cerrar %} Sí {% else %} En Proceso {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Supervisado Por:</strong></td>
+                                <td>{{ object.supervisado_por.first_name }} {{ object.supervisado_por.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong></strong></td>
+                                <td>
+                                        {% if object.cerrar is False %} 
+                                            <a class="btn btn-xs btn-warning" href="{% url 'entrada_update' object.id %}">Editar</a>
+                                        {% endif %}
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
+    
+</div>
+
+
+
+
+
+{# FORMULARIO PARA AGREGAR NUEVO DETALLE / ESTE FORMULARIO SE OCULTA #}
+
+
+{# DETALLE #}
+<div class="row">
+
+    {% if object.cerrar is False %}
+        <div class="col-md-3 col-sm-4 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><a class="collapse-link"> Agregar <i class="fa fa-chevron-down"></i></a><small> dispositivos al detalle</small></h2>
+                    
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: none;">
+                    <br />
+                    
+                    <div class="box-body  table-responsive">
+                    <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+                    <form action="{% url 'detalle_add' %}" method="post">
+                        <table class="table nowrap table-condensed table-striped table-hover">
+    
+                            {% csrf_token %}
+                            {{detalle_form.as_table}}	
+    
+                        </table>
+                        <button type="submit" class="btn btn-round btn-primary">Agregar</button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="col-md-12 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="box-header with-border">
+                <h2>Detalle</h2> 
+            </div>
+            
+            <div id="collapse1" class="box-body table-responsive">
+                <table class="table display table-striped table-hover table-condensed" id="dataTables">
+                    <thead>
+                        <tr>
+                            <th>Dispositivo</th>
+                            <th>Cantidad</th>
+                            <th>Observaciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if object %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
+                        {% for detalle in entrada.relDepuracionEntrada.all %}
+                        <tr>
+                            <td>{{ detalle.dispositivo }}</td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td> 
+                                {{ detalle.observaciones|linebreaksbr }}
+                            </td>
+                            <td>
+                                {% if object.cerrar is False %}
+                                    <a class="btn btn-round btn-xs btn-primary" href="{% url 'detalle_update' detalle.id %}">Editar</a>
+                                    <a class="btn btn-round btn-xs btn-danger" href="{% url 'detalle_delete' detalle.id %}">Eliminar</a>
+                                {% else %}
+                                    <span class="label label-danger"> Cerrado </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <h1>No hay registros</h1>
+                        {% endif %} 
+                    </tbody>
+                    <tfoot>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Acciones"/></th>
+                          </tfoot>
+                </table>
+            </div>
+        </div> 
+    </div>        
+</div>
+
+  </div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+  <!-- Skycons -->
+  <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+
+  <!-- ECharts -->
+  <script src="{% static 'vendors/echarts/dist/echarts.min.js' %}"></script>
+  <script src="{% static 'vendors/echarts/map/js/world.js' %}"></script>
+
+  <!-- DateJS -->
+  <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+  <!-- Datatables -->
+  <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+  <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+  <script>
+  $(document).ready(function() {
+
+      //Función de DataTable para establecer sus parámetros
+      $("#dataTables").DataTable({
+        dom: "Bfrtip",
+              buttons: [{
+                  extend: "copy",
+                  className: "btn-sm"
+              }, {
+                  extend: "csv",
+                  className: "btn-sm"
+              }, {
+                  extend: "excel",
+                  className: "btn-sm"
+              }, {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+              }, {
+                  extend: "print",
+                  className: "btn-sm"
+              }, ],
+              //Cambiar el idioma, también se puede hacer con un json
+              language: {
+                          
+                  "sProcessing":     "Procesando...",
+                  "sLengthMenu":     "Mostrar _MENU_ registros",
+                  "sZeroRecords":    "No se encontraron resultados",
+                  "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                  "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                  "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                  "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                  "sInfoPostFix":    "",
+                  "sSearch":         "Buscar:",
+                  "sUrl":            "",
+                  "sInfoThousands":  ",",
+                  "sLoadingRecords": "Cargando...",
+                  "lengthChange": false,
+                  "oPaginate": {
+                      "sFirst":    "Primero",
+                      "sLast":     "Último",
+                      "sNext":     "Siguiente",
+                      "sPrevious": "Anterior"
+                  },
+                  "oAria": {
+                      "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                  }
+              },
+              responsive: true,
+              "pageLength": 20,
+          });
+       
+          // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.
+          var table = $("#dataTables").DataTable();
+       
+          // // Aplicar las búsquedas por cada columna.
+          table.columns().every( function () {
+              var that = this;
+              
+              //En el tfooter se crearon los campos con th, se aplicada cada filtro a cada campo según su columna.
+              $( 'input', this.footer() ).on( 'keyup change', function () {
+                  if ( that.search() !== this.value ) {
+                      that
+                          .search( this.value )
+                          .draw();
+                  }
+              } );
+          });
+
+  });
+  
+</script> 
+
+{% endblock javascripts %}

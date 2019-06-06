@@ -33,7 +33,7 @@ class TareaForm(forms.ModelForm):
             'fecha_hora_planificada': _('Fecha hora fin'),
         }
         widgets = {
-            'tarea': forms.Textarea(attrs={"rows":"4", "tabindex":"1"}),
+            'tarea': forms.TextInput(attrs={"tabindex":"1"}),
             'fecha_hora_inicio': forms.DateTimeInput(attrs={'class':'myDateTimepicker', "tabindex":"2"}),
             'fecha_hora_planificada': forms.DateTimeInput(attrs={'class':'myDateTimepicker2', "tabindex":"3"}),
             
@@ -60,7 +60,7 @@ class TareaUpdateForm(forms.ModelForm):
 
 
             'programacion': forms.HiddenInput(),
-            'tarea': forms.Textarea(attrs={"rows":"2", 'readonly':'readonly'}),
+            'tarea': forms.TextInput(attrs={'readonly':'readonly'}),
             'fecha_hora_inicio': forms.DateTimeInput(attrs={'readonly':'readonly'}),
             'fecha_hora_planificada': forms.DateTimeInput(attrs={'readonly':'readonly'}),
 

@@ -22,11 +22,10 @@ class TipoMovimiento(models.Model):
 # Supervisión de Movimientos con herencia al control de Creaciones
 class Movimiento(ControlCreaciones):
 
-    movimiento = models.IntegerField()
+    movimiento = models.IntegerField(null=False, blank=False)
     tipo = models.ForeignKey(TipoMovimiento, related_name='relMovimientoTipo', on_delete=models.CASCADE)
     desecho = models.BooleanField(default=False)
-    bodeguita = models.BooleanField(default=False, verbose_name='Afecta Kardex')
-    dispositivo = models.CharField(max_length=100)
+    dispositivo = models.CharField(max_length=100, null=False, blank=False)
     cantidad = models.PositiveSmallIntegerField(null=False, blank=False, default=0)
     fecha = models.DateField(default=datetime.datetime.now, null=False, blank=False)
     entrega = models.ForeignKey(User, related_name='relMovimientoUsuarioEntrega', on_delete=models.CASCADE)
@@ -42,3 +41,38 @@ class Movimiento(ControlCreaciones):
         
     def __str__(self):
         return '{}'.format(self.movimiento)
+
+
+
+
+
+# Supervisión de SUNI-Entradas-Depuración a Kardex.
+class Entrada(ControlCreaciones):
+
+    entrada = models.PositiveSmallIntegerField(null=False, blank=False)
+    fecha = models.DateField(default=datetime.datetime.now, null=False, blank=False)
+    entrega = models.ForeignKey(User, related_name='relEntradaUsuarioEntrega', on_delete=models.CASCADE)
+    recibe = models.ForeignKey(User, related_name='relEntradaUsuarioRecibe', on_delete=models.CASCADE)
+    creado_en_suni = models.BooleanField(default=False)
+    hoja_impresa = models.BooleanField(default=False)
+    kardex = models.IntegerField(verbose_name='No. Kardex', null=True, blank=True)
+    registro_en_correo = models.BooleanField(default=False)
+    observaciones = models.TextField(verbose_name='Observaciones', null=True, blank=True)
+    supervisado_por = models.ForeignKey(User, related_name='relEntradaUsuarioSupervisa', on_delete=models.CASCADE)
+    cerrar = models.BooleanField(default=False)
+        
+    def __str__(self):
+        return '{}'.format(self.entrada)
+
+
+
+# Detalle de la depuración
+class DetalleDepuracion(models.Model):
+
+    entrada = models.ForeignKey(Entrada, related_name='relDepuracionEntrada', on_delete=models.CASCADE)
+    dispositivo = models.CharField(max_length=100)
+    cantidad = models.PositiveSmallIntegerField(null=False, blank=False, default=0)
+    observaciones = models.TextField(verbose_name='Observaciones', null=True, blank=True)
+        
+    def __str__(self):
+        return '{} - {}'.format(self.cantidad, self.dispositivo)
