@@ -6,6 +6,10 @@
 {% block stylesheets %}
 {{ block.super }}
 
+<!-- alertas personalizadas -->
+  <link href="{% static 'vendors/alertas/css/alertify.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/alertas/css/themes/default.css' %}" rel="stylesheet">
+
 {% endblock stylesheets %}
 
 {% block content %}
@@ -24,6 +28,10 @@
   
   <br />
   
+  <button id="boton-cargar" class="btn btn-xs btn-success">Copiar Data</button>
+  <button id="boton-ver" class="btn btn-xs btn-info">Ver Data</button>
+  <button id="boton-vaciar" class="btn btn-round btn-warning">Pegar Data</button>
+
   <div class="row">
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="x_panel">
@@ -66,6 +74,7 @@
                 </table>
                 <button type="submit" class="btn btn-round btn-primary">Guardar</button>
                 </form>
+                
             </div>
         {% endif %}
           
@@ -88,6 +97,9 @@
 <!-- bootstrap-moment -->
 <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
 
+<!-- alertas personalizadas -->
+<script src="{% static 'vendors/alertas/alertify.js' %}"></script>
+
 <!-- Mis Scripts -->
 <script src="{% static 'build/mis_scripts.js' %}"></script>  
 
@@ -97,6 +109,23 @@
     /* background-color: rgb(0, 162, 255); */
     outline: 2px solid rgb(0, 174, 255);
   }
+
+  ul.errorlist {
+  background: rgb(255, 0, 0);
+  border: 1px solid #7C7C7C;
+  color: white;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.errorlist li a {
+  color: red;
+  display: block;
+  padding: .3em;
+  text-decoration: none;
+}
+
+
 </style>
 
 <script>
@@ -112,6 +141,7 @@
       var NumeroKardex = document.getElementById("id_kardex").value;
       
       var estado = true;
+      var pendientes ="";
 
 
 
@@ -119,7 +149,7 @@
     if(completado){
       // Verifica que ya se haya creado en SUNI.
       if(!CreadoEnSuni){
-        alert("Aún no está ingresado en SUNI...");
+        pendientes = pendientes + "<strong>SUNI: </strong> " + "Aún no está ingresado en SUNI... <br />";
         estado = false;
       }
       
@@ -128,25 +158,30 @@
 
         // Verifica que la hoja ya esté impresa.
         if(!HojaImpresa){
-          alert("No hay hoja impresa!!");
+          pendientes = pendientes + "<strong>Hoja Impresa: </strong> " + "No hay hoja impresa!! <br />";
           estado = false;
         }
         
         // Verifica que existe un número ingresado en la casilla.
         if($.trim(NumeroKardex).length>0){
           }else{
-        alert("Llene el campo de No. Kardex!!");
+            pendientes = pendientes + "<strong>Sin número: </strong> " + "Llene el campo de No. Kardex!! <br />";
           	estado = false;
 		    }
       }
 
       // Verifica que ya se haya registrado todo en correo electrónico.
       if(!RegistroCorreo){
-        alert("No hay registros en correo!!");
+        pendientes = pendientes + "<strong>Correo: </strong> " + "No hay registros en correo!! <br />";
         estado = false;
       }
-
     }
+
+    if(estado){
+    }else{
+      alertify.alert("NO SE PUEDE CERRAR!", pendientes);
+    }
+
     return estado;
 };
 
@@ -160,6 +195,135 @@
     init_Switchery();
     init_select2();
     init_datapicker();
+
+    $('#boton-cargar').click(function(){                       
+        /*Obtener datos del formulario*/
+        localStorage.setItem('movimiento_tipo', document.getElementById('select2').value); //Obtener el valor del movimiento_tipo es movimiento_tipo Select2
+        localStorage.setItem('movimiento_desecho', $("#id_desecho").is(":checked")); //Obtener el valor del movimiento_desecho Check
+        localStorage.setItem('movimiento_dispositivo', document.getElementById('id_dispositivo').value); //Obtener el valor del movimiento_dispositivo textbox
+        localStorage.setItem('movimiento_cantidad', document.getElementById('id_cantidad').value); //Obtener el valor del movimiento_dispositivo textbox
+        localStorage.setItem('movimiento_fecha', document.getElementById('id_fecha').value); //Obtener el valor del movimiento_fecha textbox
+        localStorage.setItem('movimiento_entrega', document.getElementById('select2_1').value); //Obtener el valor del movimiento_tipo es movimiento_tipo Select2_1
+        localStorage.setItem('movimiento_recibe', document.getElementById('select2_2').value); //Obtener el valor del movimiento_tipo es movimiento_tipo Select2_2
+        localStorage.setItem('movimiento_creado_en_suni', $("#id_creado_en_suni").is(":checked")); //Obtener el valor del movimiento_creado_en_suni Check
+        localStorage.setItem('movimiento_hoja_impresa', $("#id_hoja_impresa").is(":checked")); //Obtener el valor del movimiento_hoja_impresa Check
+        localStorage.setItem('movimiento_genera_kardex', $("#id_genera_kardex").is(":checked")); //Obtener el valor del movimiento_genera_kardex Check
+        localStorage.setItem('movimiento_kardex', document.getElementById('id_kardex').value); //Obtener el valor del movimiento_kardex textbox
+        localStorage.setItem('movimiento_registro_en_correo', $("#id_registro_en_correo").is(":checked")); //Obtener el valor del movimiento_registro_en_correo Check
+        localStorage.setItem('movimiento_observaciones', document.getElementById('id_observaciones').value); //Obtener el valor del movimiento_observaciones textbox
+        localStorage.setItem('movimiento_supervisado_por', document.getElementById('select2_3').value); //Obtener el valor del movimiento_supervisado_por es movimiento_tipo Select2_3
+        localStorage.setItem('movimiento_completado', $("#id_supervision_completada").is(":checked")); //Obtener el valor del movimiento_completado Check
+
+    });
+
+    $('#boton-ver').click(function(){                       
+        /*Obtener datos del formulario*/
+        //alert(localStorage.getItem('movimiento_tipo'));
+        //alert(localStorage.getItem('movimiento_desecho'));
+        //alert(localStorage.getItem('movimiento_dispositivo'));
+        //alert(localStorage.getItem('movimiento_cantidad'));
+        //alert(localStorage.getItem('movimiento_fecha'));
+        //alert(localStorage.getItem('movimiento_entrega'));
+        //alert(localStorage.getItem('movimiento_recibe'));
+        //alert(localStorage.getItem('movimiento_creado_en_suni'));
+        //alert(localStorage.getItem('movimiento_hoja_impresa'));
+        //alert(localStorage.getItem('movimiento_genera_kardex'));
+        //alert(localStorage.getItem('movimiento_kardex'));
+        //alert(localStorage.getItem('movimiento_registro_en_correo'));
+        //alert(localStorage.getItem('movimiento_observaciones'));
+        //alert(localStorage.getItem('movimiento_supervisado_por'));
+        //alert(localStorage.getItem('movimiento_completado'));
+
+        // Construir cadena para mostrar la data copiada.
+        var resultado = "";
+        resultado = "<strong>Tipo: </strong> " + localStorage.getItem('movimiento_tipo') + " <br />";
+        resultado = resultado + "<strong>Desecho: </strong> " + localStorage.getItem('movimiento_desecho') + " <br />";
+        resultado = resultado + "<strong>Dispositivo: </strong> " + localStorage.getItem('movimiento_dispositivo') + " <br />";
+        resultado = resultado + "<strong>Cantidad: </strong> " + localStorage.getItem('movimiento_cantidad') + " <br />";
+        resultado = resultado + "<strong>Fecha: </strong> " + localStorage.getItem('movimiento_fecha') + " <br />";
+        resultado = resultado + "<strong>Entrega: </strong> " + localStorage.getItem('movimiento_entrega') + " <br />";
+        resultado = resultado + "<strong>Recibe: </strong> " + localStorage.getItem('movimiento_recibe') + " <br />";
+        resultado = resultado + "<strong>Creado en SUNI: </strong> " + localStorage.getItem('movimiento_creado_en_suni') + " <br />";
+        resultado = resultado + "<strong>Hoja Impresa: </strong> " + localStorage.getItem('movimiento_hoja_impresa') + " <br />";
+        resultado = resultado + "<strong>Genera Kardex: </strong> " + localStorage.getItem('movimiento_genera_kardex') + " <br />";
+        resultado = resultado + "<strong>No. Kardex: </strong> " + localStorage.getItem('movimiento_kardex') + " <br />";
+        resultado = resultado + "<strong>Registro en Correo: </strong> " + localStorage.getItem('movimiento_registro_en_correo') + " <br />";
+        resultado = resultado + "<strong>Observaciones: </strong> " + localStorage.getItem('movimiento_observaciones') + " <br />";
+        resultado = resultado + "<strong>Supervisado por: </strong> " + localStorage.getItem('movimiento_supervisado_por') + " <br />";
+        resultado = resultado + "<strong>Completado: </strong> " + localStorage.getItem('movimiento_completado') + " ";
+
+        alertify.alert('DATA ALMACENADA', resultado);
+        
+    }); 
+
+
+
+    $('#boton-vaciar').click(function(){
+        // Cargar select2                       
+        $('#select2').val(localStorage.getItem('movimiento_tipo')).trigger('change');
+        
+        // Cargar checkbox según su estado
+        if(localStorage.getItem('movimiento_desecho') == 'true'){
+          $('#id_desecho').prop('checked', true);
+        }else{
+          $('#id_desecho').prop('checked', false);
+        }
+
+        // Cargar TextBox
+        $('#id_dispositivo').val(localStorage.getItem('movimiento_dispositivo'));
+        $('#id_cantidad').val(localStorage.getItem('movimiento_cantidad'));
+        $('#id_fecha').val(localStorage.getItem('movimiento_fecha'));
+
+        // Cargar select2
+        $('#select2_1').val(localStorage.getItem('movimiento_entrega')).trigger('change');
+        $('#select2_2').val(localStorage.getItem('movimiento_recibe')).trigger('change');
+
+        // Cargar checkbox según su estado
+        if(localStorage.getItem('movimiento_creado_en_suni') == 'true'){
+          $('#id_creado_en_suni').prop('checked', true);
+        }else{
+          $('#id_creado_en_suni').prop('checked', false);
+        }
+
+        // Cargar checkbox según su estado
+        if(localStorage.getItem('movimiento_hoja_impresa') == 'true'){
+          $('#id_hoja_impresa').prop('checked', true);
+        }else{
+          $('#id_hoja_impresa').prop('checked', false);
+        }
+
+        // Cargar checkbox según su estado
+        if(localStorage.getItem('movimiento_genera_kardex') == 'true'){
+          $('#id_genera_kardex').prop('checked', true);
+        }else{
+          $('#id_genera_kardex').prop('checked', false);
+        }
+
+        // Cargar TextBox
+        $('#id_kardex').val(localStorage.getItem('movimiento_kardex'));
+
+        // Cargar checkbox según su estado
+        if(localStorage.getItem('movimiento_registro_en_correo') == 'true'){
+          $('#id_registro_en_correo').prop('checked', true);
+        }else{
+          $('#id_registro_en_correo').prop('checked', false);
+        }
+
+        // Cargar TextArea
+        $('#id_observaciones').val(localStorage.getItem('movimiento_observaciones'));
+
+        // Cargar select2                       
+        $('#select2_3').val(localStorage.getItem('movimiento_supervisado_por')).trigger('change');
+
+        // Cargar checkbox según su estado
+        if(localStorage.getItem('movimiento_completado') == 'true'){
+          $('#id_supervision_completada').prop('checked', true);
+        }else{
+          $('#id_supervision_completada').prop('checked', false);
+        }
+
+
+    });
 
   });
 

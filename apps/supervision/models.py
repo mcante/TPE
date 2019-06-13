@@ -22,7 +22,7 @@ class TipoMovimiento(models.Model):
 # Supervisión de Movimientos con herencia al control de Creaciones
 class Movimiento(ControlCreaciones):
 
-    movimiento = models.IntegerField(null=False, blank=False)
+    movimiento = models.IntegerField(null=False, blank=False, unique=True)
     tipo = models.ForeignKey(TipoMovimiento, related_name='relMovimientoTipo', on_delete=models.CASCADE)
     desecho = models.BooleanField(default=False)
     dispositivo = models.CharField(max_length=100, null=False, blank=False)

@@ -5,6 +5,9 @@
 
 {% block stylesheets %}
 {{ block.super }}
+<!-- alertas personalizadas -->
+<link href="{% static 'vendors/alertas/css/alertify.css' %}" rel="stylesheet">
+<link href="{% static 'vendors/alertas/css/themes/default.css' %}" rel="stylesheet">
 
 {% endblock stylesheets %}
 
@@ -85,6 +88,9 @@
 <!-- bootstrap-moment -->
 <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
 
+<!-- alertas personalizadas -->
+<script src="{% static 'vendors/alertas/alertify.js' %}"></script>
+
 <!-- Mis Scripts -->
 <script src="{% static 'build/mis_scripts.js' %}"></script>  
 
@@ -108,20 +114,20 @@
       var NumeroKardex = document.getElementById("id_kardex").value;
       
       var estado = true;
-
+      var pendientes ="";
 
 
     // Sí marca el check de Supervisión completada, se realizará una serie de validaciones.
     if(Cerrar){
       // Verifica que ya se haya creado en SUNI.
       if(!CreadoEnSuni){
-        alert("Aún no está ingresado en SUNI...");
+        pendientes = pendientes + "<strong>SUNI: </strong> " + "Aún no está ingresado en SUNI... <br />";
         estado = false;
       }
       
       // Verifica que la hoja ya esté impresa.
       if(!HojaImpresa){
-        alert("No hay hoja impresa!!");
+        pendientes = pendientes + "<strong>Hoja Impresa: </strong> " + "No hay hoja impresa!! <br />";
         estado = false;
       }
 
@@ -129,18 +135,24 @@
     // Verifica que existe un número ingresado en la casilla.
     if($.trim(NumeroKardex).length>0){
     }else{
-		alert("Llene el campo de No. Kardex!!");
+      pendientes = pendientes + "<strong>Sin número: </strong> " + "Llene el campo de No. Kardex!! <br />";
         estado = false;
 	}
       
 
       // Verifica que ya se haya registrado todo en correo electrónico.
       if(!RegistroCorreo){
-        alert("No hay registros en correo!!");
+        pendientes = pendientes + "<strong>Correo: </strong> " + "No hay registros en correo!! <br />";
         estado = false;
       }
 
     }
+
+    if(estado){
+    }else{
+      alertify.alert("NO SE PUEDE CERRAR!", pendientes);
+    }
+    
     return estado;
 };
 
