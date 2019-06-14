@@ -1,13 +1,18 @@
-from django.shortcuts import render
-from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView, FormView
 from django.urls import reverse_lazy, reverse
+from django.http import JsonResponse, HttpResponse
+from django.core import serializers
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import GroupRequiredMixin
 
 
 from .models import Movimiento, TipoMovimiento, Entrada, DetalleDepuracion
-from .forms import MovimientoForm, EntradaForm, DetalleDepuracionForm
+from .forms import MovimientoForm, EntradaForm, DetalleDepuracionForm, MovimientosInformeForm
+from .serializers import MovimientoSerializer
+
+from rest_framework import generics
 
 
 """ Movimientos Solicitudes / Devoluciones """
@@ -29,6 +34,52 @@ class MovimientoUpdateView(GroupRequiredMixin, LoginRequiredMixin, UpdateView):
     form_class = MovimientoForm
     template_name = 'supervision/movimiento_add.html'
     success_url = reverse_lazy('movimiento_list')
+
+class MovimientoInformeList(LoginRequiredMixin, FormView):
+    """Vista encarga de gestionar el listado de :class:`Proyecto`,obteniendo los datos necesarios
+    por medio del metodo GET nos muestra el template proyecto_list.
+    """
+    model = Movimiento
+    form_class = MovimientosInformeForm
+    template_name = 'supervision/movimientoinforme_list.html'
+
+
+class MovimientoRestList(generics.ListAPIView):
+    queryset = Movimiento.objects.all()
+    serializer_class = MovimientoSerializer
+
+
+""" Generar el Informe de Movimiento """
+def MovimientoInforme(request):
+    if request.is_ajax():
+        informe = Movimiento.objects.filter(fecha__range=(request.GET['fecha_min'], request.GET['fecha_max']))
+        # Declarar diccionario
+        f = []
+
+        # Recorrer el resultado de la consulta e ir generando el diccionario
+        for x in informe:
+
+            # Cambiar la palabra True por Completado o False por Pendiente
+            if(x.supervision_completada):
+                estado = 'Completado'
+            else:
+                estado = 'Pendiente'
+            # Crear para el diccionario
+            fila = {'movimiento':x.movimiento,'fecha':x.fecha,'tipo':x.tipo.tipo,'dispositivo':x.dispositivo,'entrega':(x.entrega.first_name + ' ' + x.entrega.last_name),'recibe':(x.recibe.first_name + ' ' + x.recibe.last_name),'kardex':x.kardex,'supervisado':(x.supervisado_por.first_name + ' ' + x.supervisado_por.last_name),'estado':estado}
+
+            # Agregar fila al diccionario
+            f.append(fila)
+
+        #response = serializers.serialize('json', informe)
+        #return HttpResponse(response, content_type='application/json')
+
+        # Serializar diccionario con safe=False y convertirlo a Json
+        return JsonResponse(f, safe=False)
+    else:
+        return redirect('/')
+
+
+
 
 
 

@@ -57,3 +57,16 @@ class DetalleDepuracionForm(forms.ModelForm):
         widgets = {
             'entrada': forms.HiddenInput(),
         }
+
+
+class MovimientosInformeForm(forms.Form):
+    """Formulario que Controla los filtros para poder hacer busquedas
+    """
+    fecha_min = forms.CharField(
+        label='Fecha (inicial)',
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control myDatepickerConsulta1'}))
+    fecha_max = forms.CharField(
+        label='Fecha (final)',
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control myDatepickerConsulta2'}))

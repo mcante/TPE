@@ -168,7 +168,17 @@ function init_datapicker() {
     $('.myDatepicker2').datetimepicker({
         format: 'DD/MM/YYYY',
         locale:'es'
-    });  
+    });
+    
+    $('.myDatepickerConsulta1').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale:'es'
+    });
+
+    $('.myDatepickerConsulta2').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale:'es'
+    });
 
     $('.myDateTimepicker').datetimepicker({
         format: 'DD/MM/YYYY H:mm',
