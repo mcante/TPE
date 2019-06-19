@@ -245,7 +245,7 @@
             //ESTA FUNCIÓN FUNCIONA... 
             $.ajax({
                 data: datos,
-                url: "http://127.0.0.1:8000/supervision/api/movimientos/",
+                url: "/supervision/api/movimientos/",
                 type: 'GET',
                 dataType:'json',
 
@@ -289,7 +289,7 @@
         if (datos.fecha_min.length > 0 && datos.fecha_max.length > 0){
         
             // CONSTRUIR URL A LA QUE ENVÍA LA SOLICITUD REST EL AJAX
-            url_rest = "http://127.0.0.1:8000/supervision/api/movimientos/?";
+            url_rest = "/supervision/api/movimientos/?";
             url_rest = url_rest + "tipo=" + datos.tipo + "&";
             url_rest = url_rest + "fecha_min=" + datos.fecha_min + "&";
             url_rest = url_rest + "fecha_max=" + datos.fecha_max;
