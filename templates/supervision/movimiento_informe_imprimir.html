@@ -1,0 +1,161 @@
+{% load static  %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        INFORME DE MOVIMIENTOS
+    </title>
+</head>
+<meta charset="utf-8" />
+
+
+
+<body>
+    
+    <div class="encabezado">
+        
+    </div>
+
+    <center>
+        <h1 id="Titulo_encabezado" ></h1>
+    </center>
+
+    <HR></HR>
+    <center>
+        <div >
+                <p id="fecha">Fecha de informe: </p> 
+        </div>
+    </center>
+    <HR></HR>
+    
+    <br />
+    <br />
+
+    
+    <center>
+        <p class="saludo">
+            <h3>Lista de movimientos</h3>
+        </p>
+    </center>
+    
+        
+
+    <center>
+        <table class="cuerpo" border="1">
+            <thead>
+                <tr>
+                    <th>Movimiento</th>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Dispositivo</th>
+                    <th>Entrega</th>
+                    <th>Recibe</th>
+                    <th>Kardex</th>
+                    <th>Supervisado Por</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="tablita">
+
+            </tbody>
+        </table>
+    </center>
+    
+    <p class="despedida">        
+            <div class="pie">
+
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                VoBo.____________________________
+                <br />
+                       <div class="vobo">Jefe Inmediato</div>
+                </p>
+        </div>
+    </div>
+    
+    
+    
+    
+    <!--INICIA EL CSS-->
+    <style type="text/css">
+        body{
+            font-size: 11px;
+            font-family: tahoma;
+        }
+        @page{
+            margin-top: 0mm;
+            margin-bottom: 0mm;
+            margin-left: 8mm;
+            margin-right: 10mm;
+        }
+        .encabezado{
+            margin-top: 50px;
+        }
+        .fecha{
+            
+            margin-top: -40px;
+        }
+        .presentacion{
+            margin-top: 40px;
+        }
+        .cuerpo tr:nth-child(odd) {
+            background-color:#9d9fae;
+        }
+        .cuerpo tr:nth-child(even) {
+            background-color:#aeafb5;
+        }
+        .saludo{
+            margin-left: 7mm;
+        }
+        .vobo{
+            margin-left: 20mm;
+        }
+        .despedida{
+            margin-left: 7mm;
+        }
+    </style>
+
+    <!-- jQuery -->
+    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+
+
+        <script>
+
+            // COLOCAR EL RANGO DE FECHAS EN EL TÍTULO
+            var titulo_encabezado = "SUPERVISIÓN DE SOLICITUDES Y DEVOLUCIONES <br />" + localStorage.getItem('fecha_min_movimiento_rest') + " AL " + localStorage.getItem('fecha_max_movimiento_rest')
+            document.getElementById("Titulo_encabezado").innerHTML = titulo_encabezado;
+            
+            // COLOCAR FECHA AL INFORME CON JS
+            var fecha = new Date();
+            document.getElementById("fecha").innerHTML = "Fecha de informe: " + fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + fecha.getFullYear();
+
+
+            //ESTA FUNCIÓN FUNCIONA... 
+            $.ajax({
+                url: localStorage.getItem('url_movimiento_rest'),
+                type: 'GET',
+                dataType:'json',
+
+                success: function(result){
+                    var fila ="";
+                    for (  i = 0 ; i < result.length; i++){
+                        fila = fila + "<tr><td>" + result[i].movimiento + "</td> <td>" + result[i].fecha + "</td> <td>" + result[i].tipo + "</td> <td>" + result[i].dispositivo + "</td> <td>" + result[i].entrega + "</td> <td>" + result[i].recibe + "</td> <td>" + result[i].kardex  + "</td> <td>" + result[i].supervisado_por   + "</td> <td>" + result[i].supervision_completada + "</td></tr>";
+                    }
+                    // INSERTAR LAS FILAS AL BODY DE LA TABLA
+                    document.getElementById("tablita").innerHTML = fila;
+
+                    // LLAMA A IMPRIMIR
+                    window.print();
+                    window.close();
+                }
+            });
+        </script>
+        
+        
+    </body>
+    </html>
+    
+    

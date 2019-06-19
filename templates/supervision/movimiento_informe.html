@@ -37,10 +37,11 @@
                 </table>
                 <button id="boton-consultar" class="btn btn-round btn-info form-control">Generar Informe</button>
             </form>
+            <a  id="boton-imprimir"class="btn btn-round btn-primary form-control" href="{% url 'movimiento_informe_print'%}" target="_blank"><i class="fa fa-print"></i> Imprimir</a>
         </div>
 
 
-      <div class="col-md-12 col-sm-4 col-xs-12">
+      <div class="col-md-9 col-sm-6 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
             
@@ -130,6 +131,7 @@
     $(document).ready(function() {
 
         init_datapicker();
+        init_select2();
 
         //Función de DataTable para establecer sus parámetros
         $("#dataTables").DataTable({
@@ -213,37 +215,46 @@
     $('#boton-consultar').click(function(){
 
         var datos = {};
+        datos.tipo = $("#id_tipo").val();
         datos.fecha_min = $("#id_fecha_min").val();
         datos.fecha_max = $("#id_fecha_max").val();
 
+
         if (datos.fecha_min.length > 0 && datos.fecha_max.length > 0){
         
-        document.title = "TPE | MOVIMIENTOS <i class='fa fa-print'></i> <br /> " + " DEL <strong>" + datos.fecha_min + "</strong> AL <strong>" + datos.fecha_max + "</strong> <br /> <hr>";
+        //document.title = "TPE | MOVIMIENTOS <i class='fa fa-print'></i> <br /> " + " DEL <strong>" + datos.fecha_min + "</strong> AL <strong>" + datos.fecha_max + "</strong> <br /> <hr>";
+
+            // CONSTRUIR URL A LA QUE ENVÍA LA SOLICITUD REST EL AJAX
+            url_rest = "http://127.0.0.1:8000/supervision/api/movimientos/?";
+            url_rest = url_rest + "tipo=" + datos.tipo + "&";
+            url_rest = url_rest + "fecha_min=" + datos.fecha_min + "&";
+            url_rest = url_rest + "fecha_max=" + datos.fecha_max;
+
+            // GUARDAR URL EN LA MEMORIA DEL NAVEGADOR PARA UTILIZARLA EN EL INFORME DE IMPRESIÓN
+            localStorage.setItem('url_movimiento_rest', ""); // Limpiar URL guardada
+            localStorage.setItem('fecha_min_movimiento_rest', ""); // Limpiar Fecha min guardada
+            localStorage.setItem('fecha_max_movimiento_rest', ""); // Limpiar Fecha max guardada
+
+            localStorage.setItem('url_movimiento_rest', url_rest); // Almacenar la nueva URL
+            localStorage.setItem('fecha_min_movimiento_rest', datos.fecha_min); // Almacenar la nueva fecha min
+            localStorage.setItem('fecha_max_movimiento_rest', datos.fecha_max); // Almacenar la nueva fecha max
+            //alertify.alert (localStorage.getItem('url_movimiento_rest')); // MOSTRAR URL GUARDADA.
 
 
-        //console.log(datos);
 
             //ESTA FUNCIÓN FUNCIONA... 
             $.ajax({
                 data: datos,
-                url: "{% url 'movimiento_informe' %}",
+                url: "http://127.0.0.1:8000/supervision/api/movimientos/",
                 type: 'GET',
                 dataType:'json',
-                
 
                 success: function(result){
 
-                    console.log(result);
-
                     var table = $("#dataTables").DataTable();
                     table.clear();
-                    //table.draw();
-                    
-                    //alert(result.length);
 
                     for (  i = 0 ; i < result.length; i++){
-                        //console.log(result[i].movimiento);
-
                         table.row.add( [
                             result[i].movimiento,
                             result[i].fecha,
@@ -252,15 +263,11 @@
                             result[i].entrega,
                             result[i].recibe,
                             result[i].kardex,
-                            result[i].supervisado,
-                            result[i].estado,
+                            result[i].supervisado_por,
+                            result[i].supervision_completada,
                         ] ).draw( false );
-
-                        //console.log(result[i].fields.tipo);
-                        //console.log(result[i].fields.dispositivo);
                     }
                 }
-
             });
         
             return false;
@@ -270,6 +277,36 @@
         }
     });
 
+
+    $('#boton-imprimir').click(function(){
+
+        var datos = {};
+        datos.tipo = $("#id_tipo").val();
+        datos.fecha_min = $("#id_fecha_min").val();
+        datos.fecha_max = $("#id_fecha_max").val();
+
+
+        if (datos.fecha_min.length > 0 && datos.fecha_max.length > 0){
+        
+            // CONSTRUIR URL A LA QUE ENVÍA LA SOLICITUD REST EL AJAX
+            url_rest = "http://127.0.0.1:8000/supervision/api/movimientos/?";
+            url_rest = url_rest + "tipo=" + datos.tipo + "&";
+            url_rest = url_rest + "fecha_min=" + datos.fecha_min + "&";
+            url_rest = url_rest + "fecha_max=" + datos.fecha_max;
+
+            // GUARDAR URL EN LA MEMORIA DEL NAVEGADOR PARA UTILIZARLA EN EL INFORME DE IMPRESIÓN
+            localStorage.setItem('url_movimiento_rest', ""); // Limpiar URL guardada
+            localStorage.setItem('fecha_min_movimiento_rest', ""); // Limpiar Fecha min guardada
+            localStorage.setItem('fecha_max_movimiento_rest', ""); // Limpiar Fecha max guardada
+            
+            localStorage.setItem('url_movimiento_rest', url_rest); // Almacenar la nueva URL
+            localStorage.setItem('fecha_min_movimiento_rest', datos.fecha_min); // Almacenar la nueva fecha min
+            localStorage.setItem('fecha_max_movimiento_rest', datos.fecha_max); // Almacenar la nueva fecha max
+            //alertify.alert (localStorage.getItem('url_movimiento_rest')); // MOSTRAR URL GUARDADA.
+        }else{
+            alertify.alert("FORMULARIO INCOMPLETO", "Se requieren los campos de fecha inicial y fecha final.");
+        }
+    });
 });
 
     

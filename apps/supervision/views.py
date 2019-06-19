@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView, FormView
 from django.urls import reverse_lazy, reverse
 from django.http import JsonResponse, HttpResponse
@@ -8,12 +8,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import GroupRequiredMixin
 
 
-from .models import Movimiento, TipoMovimiento, Entrada, DetalleDepuracion
+from .models import Movimiento, TipoMovimiento, Entrada, DetalleDepuracion, User
 from .forms import MovimientoForm, EntradaForm, DetalleDepuracionForm, MovimientosInformeForm
-from .serializers import MovimientoSerializer
+from .serializers import MovimientoSerializer, MovimientoInformeSerializer, TipoSerializer, UsuariosSerializer
+from .filters import MovimientoFilter
+
 
 from rest_framework import generics
 
+from rest_framework import viewsets
 
 """ Movimientos Solicitudes / Devoluciones """
 class MovimientoListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
@@ -35,21 +38,32 @@ class MovimientoUpdateView(GroupRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'supervision/movimiento_add.html'
     success_url = reverse_lazy('movimiento_list')
 
-class MovimientoInformeList(LoginRequiredMixin, FormView):
+
+class MovimientoInformeFormView(LoginRequiredMixin, FormView):
     """Vista encarga de gestionar el listado de :class:`Proyecto`,obteniendo los datos necesarios
     por medio del metodo GET nos muestra el template proyecto_list.
     """
     model = Movimiento
     form_class = MovimientosInformeForm
-    template_name = 'supervision/movimientoinforme_list.html'
+    template_name = 'supervision/movimiento_informe.html'
+
+class MovimientoInformeImprimir(LoginRequiredMixin, ListView):
+    """Vista encarga de gestionar el listado de :class:`Proyecto`,obteniendo los datos necesarios
+    por medio del metodo GET nos muestra el template proyecto_list.
+    """
+    model = Movimiento
+    form_class = MovimientosInformeForm
+    template_name = 'supervision/movimiento_informe_imprimir.html'
 
 
-class MovimientoRestList(generics.ListAPIView):
-    queryset = Movimiento.objects.all()
+class MovimientoRestList(viewsets.ModelViewSet):
     serializer_class = MovimientoSerializer
+    queryset = Movimiento.objects.all()
+    filter_class = MovimientoFilter
 
 
-""" Generar el Informe de Movimiento """
+
+""" Generar el Informe de Movimiento -- ESTA FORMA SÓLO FUE UN ENSAYO, NO SE UTILIZARÁ"""
 def MovimientoInforme(request):
     if request.is_ajax():
         informe = Movimiento.objects.filter(fecha__range=(request.GET['fecha_min'], request.GET['fecha_max']))

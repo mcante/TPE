@@ -1,7 +1,7 @@
 from django import forms
 
 from django.forms import ModelForm
-from .models import Movimiento, Entrada, DetalleDepuracion
+from .models import Movimiento, Entrada, DetalleDepuracion, TipoMovimiento
 
 
 """ Formulario de Movimientos y kardex """
@@ -62,6 +62,11 @@ class DetalleDepuracionForm(forms.ModelForm):
 class MovimientosInformeForm(forms.Form):
     """Formulario que Controla los filtros para poder hacer busquedas
     """
+    tipo = forms.ModelChoiceField(
+        queryset=TipoMovimiento.objects.all(),
+        label='Tipo',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control select2'}))
     fecha_min = forms.CharField(
         label='Fecha (inicial)',
         required=True,
