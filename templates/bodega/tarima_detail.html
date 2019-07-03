@@ -1,0 +1,183 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} HISTÓRICO TARIMA {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1><a href="{% url 'tarima_update' object.id %}" > <span class="label label-danger"> ACTUALIZAR TARIMA #{{ object.id }} </span> </a></h1>
+    
+        <a class="btn btn-round btn-warning" href="{% url 'tarima_list' %}"><i class="fa fa-reply"></i> Listar Tarimas</a>
+    
+    <!-- /top tiles -->
+
+
+
+{# DETALLE #}
+<div class="row">
+
+    <div class="col-md-12 col-sm-4 col-xs-12">
+        <div class="x_panel">
+            <div class="box-header with-border">
+                <h2>Detalle</h2> 
+            </div>
+            
+            <div id="collapse1" class="box-body table-responsive">
+                <table class="table display table-striped table-hover table-condensed" id="dataTables">
+                    <thead>
+                        <tr>
+                            <th>Registro</th>
+                            <th>Fecha</th>
+                            <th>Sector</th>
+                            <th>Contenido</th>
+                            <th>Estado</th>
+                            <th>Editado Por</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if object %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
+                        {% for detalle in Historico.all %}
+                        <tr>
+                            <td>{{ detalle.id }}</td>
+                            <td>{{ detalle.fecha|date:"SHORT_DATE_FORMAT" }}</td>
+                            <td>{{ detalle.sector }}</td>
+                            <td>{{ detalle.contenido|linebreaksbr }}</td>
+                            <td>{{ detalle.estado }}</td>
+                            <td>{{ detalle.editado_por.get_full_name }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <h1>No hay registros</h1>
+                        {% endif %} 
+                    </tbody>
+                    <tfoot>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                            <th><input type="text" placeholder="Buscar"/></th>
+                          </tfoot>
+                </table>
+            </div>
+        </div> 
+    </div>        
+</div>
+
+  </div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+  <!-- Skycons -->
+  <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+
+  <!-- ECharts -->
+  <script src="{% static 'vendors/echarts/dist/echarts.min.js' %}"></script>
+  <script src="{% static 'vendors/echarts/map/js/world.js' %}"></script>
+
+  <!-- DateJS -->
+  <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+  <!-- Datatables -->
+  <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+  <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+  <script>
+  $(document).ready(function() {
+
+      //Función de DataTable para establecer sus parámetros
+      $("#dataTables").DataTable({
+        dom: "Blfrtip",
+              buttons: [{
+                  extend: "copy",
+                  className: "btn-primary"
+              }, {
+                  extend: "csv",
+                  className: "btn-success"
+              }, {
+                  extend: "excel",
+                  className: "btn-primary"
+              }, {
+                  extend: "pdfHtml5",
+                  className: "btn-primary"
+              }, {
+                  extend: "print",
+                  className: "btn-primary"
+              }, ],
+              //Cambiar el idioma, también se puede hacer con un json
+              language: {
+                          
+                  "sProcessing":     "Procesando...",
+                  "sLengthMenu":     "Mostrar _MENU_ registros",
+                  "sZeroRecords":    "No se encontraron resultados",
+                  "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                  "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                  "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                  "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                  "sInfoPostFix":    "",
+                  "sSearch":         "Buscar:",
+                  "sUrl":            "",
+                  "sInfoThousands":  ",",
+                  "sLoadingRecords": "Cargando...",
+                  "lengthChange": false,
+                  "oPaginate": {
+                      "sFirst":    "Primero",
+                      "sLast":     "Último",
+                      "sNext":     "Siguiente",
+                      "sPrevious": "Anterior"
+                  },
+                  "oAria": {
+                      "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                  }
+              },
+              paging: true,
+              pagingType: "full_numbers",
+              "pageLength": 25,
+              "order": [[ 0, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 0
+          });
+       
+          // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.
+          var table = $("#dataTables").DataTable();
+       
+          // // Aplicar las búsquedas por cada columna.
+          table.columns().every( function () {
+              var that = this;
+              
+              //En el tfooter se crearon los campos con th, se aplicada cada filtro a cada campo según su columna.
+              $( 'input', this.footer() ).on( 'keyup change', function () {
+                  if ( that.search() !== this.value ) {
+                      that
+                          .search( this.value )
+                          .draw();
+                  }
+              } );
+          });
+
+  });
+  
+</script> 
+
+{% endblock javascripts %}

@@ -34,6 +34,7 @@ urlpatterns = [
     path('entregas/', include('apps.equipamientos.urls')),
     path('planificacion/', include('apps.tareas.urls')),
     path('supervision/', include('apps.supervision.urls')),
+    path('bodega/', include('apps.bodega.urls')),
 
     path('accounts/', include('django.contrib.auth.urls')),
 ]

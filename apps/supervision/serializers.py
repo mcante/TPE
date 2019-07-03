@@ -29,9 +29,9 @@ class MovimientoSerializer(serializers.ModelSerializer):
 
     def get_supervision_completada(sel, object):
         if object.supervision_completada:
-            return "Si"
+            return "Completado"
         else:
-            return "No"
+            return "Pendiente"
 
 
 

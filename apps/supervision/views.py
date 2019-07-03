@@ -62,7 +62,6 @@ class MovimientoRestList(viewsets.ModelViewSet):
     filter_class = MovimientoFilter
 
 
-
 """ Generar el Informe de Movimiento -- ESTA FORMA SÓLO FUE UN ENSAYO, NO SE UTILIZARÁ"""
 def MovimientoInforme(request):
     if request.is_ajax():

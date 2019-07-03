@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'apps.rutas',
     'apps.tareas',
     'apps.supervision',
+    'apps.bodega',
     
 ]
 

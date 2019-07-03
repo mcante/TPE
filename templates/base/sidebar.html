@@ -84,12 +84,24 @@
         
 
         
-          <li><a><i class="fa fa-cogs"></i> Equipamientos <span class="fa fa-chevron-down"></span></a>
+          <li><a><i class="fa fa-university"></i> Equipamientos <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url 'equipamiento_add' %}">Nueva Entrega</a></li>
               <li><a href="{% url 'equipamiento_list' %}">Listar Entregas</a></li>
               <li><a href="{% url 'informe_add' %}">Nuevo Informe</a></li>
               <li><a href="{% url 'informe_list' %}">Listar Informes</a></li>
+            </ul>
+          </li>
+
+          <li><a><i class="fa fa-server"></i> Bodega <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a>General<span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                      <li><a href="{% url 'tarima_list' %}">Listado de Tarimas</a></li>
+                      <li><a href="{% url 'pasillo_informe' %}">Buscador por Pasillo</a></li>
+                      <li><a href="{% url 'tarima_informe' %}">Histórico de Tarimas</a></li>
+                  </ul>
+                </li>
             </ul>
           </li>
         

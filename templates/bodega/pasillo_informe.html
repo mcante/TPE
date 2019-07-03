@@ -1,0 +1,251 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} PASILLOS {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+
+  <!-- alertas personalizadas -->
+  <link href="{% static 'vendors/alertas/css/alertify.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/alertas/css/themes/default.css' %}" rel="stylesheet">
+
+<!-- Datatables -->
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    
+    <!-- /top tiles -->
+
+    
+    <br />
+
+    <div class="row">
+
+        <div class="col-md-2 col-sm-4 col-xs-8">
+            <form method="GET" action="" class="form-horizontal form-label-left">
+                <table class="table table-striped table-hover table-condensed">
+                    {% csrf_token %}
+                    {{form.as_table}}	
+                </table>
+                <button id="boton-consultar" class="btn btn-round btn-info form-control">Generar Informe</button>
+            </form>
+        </div>
+
+
+      <div class="col-md-10 col-sm-6 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            
+            
+        
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="box-body table-responsive">
+            <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+                <table width="100%" class="table display table-striped table-hover" id="dataTables" >
+                    <thead align="center">
+                        <tr>
+                            <th>Tarima</th>
+                            <th>Sector</th>
+                            <th>Contenido</th>
+                            <th>Editado Por</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                      <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Buscar"/></th>
+                      <th><input type="text" placeholder="Buscar"/></th>
+                    </tfoot>
+                </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <!-- DateJS -->
+<script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+<!-- bootstrap-moment -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+
+<!-- alertas personalizadas -->
+<script src="{% static 'vendors/alertas/alertify.js' %}"></script>
+
+<!-- Mis Scripts -->
+<script src="{% static 'build/mis_scripts.js' %}"></script> 
+
+<!-- Datatables -->
+    <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+    <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+    <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+    <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+    <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+    <script>
+    $(document).ready(function() {
+
+        init_select2();
+
+        //Función de DataTable para establecer sus parámetros
+        $("#dataTables").DataTable({
+          dom: "Blfrtip",
+                buttons: [{
+                    extend: "copy",
+                    className: "btn-primary"
+                }, {
+                    extend: "csv",
+                    className: "btn-success"
+                }, {
+                    extend: "excel",
+                    className: "btn-primary"
+                }, {
+                    extend: "pdfHtml5",
+                    className: "btn-primary"
+                }, {
+                    extend: "print",
+                    className: "btn-primary"
+                }, ],
+                //Cambiar el idioma, también se puede hacer con un json
+                language: {
+                            
+                    "sProcessing":     "Procesando...",
+                    "sLengthMenu":     "Mostrar _MENU_ registros",
+                    "sZeroRecords":    "No se encontraron resultados",
+                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix":    "",
+                    "sSearch":         "Buscar:",
+                    "sUrl":            "",
+                    "sInfoThousands":  ",",
+                    "sLoadingRecords": "Cargando...",
+                    "lengthChange": false,
+                    "oPaginate": {
+                        "sFirst":    "Primero",
+                        "sLast":     "Último",
+                        "sNext":     "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                },
+                //responsive: true // No permitir que la tabla resultante sea responsive
+                //"ordering": false // Deshabilitar las opciones de filtros en las columnas.
+                paging: true,
+                pagingType: "full_numbers",
+                "pageLength": 25,
+                "order": [[ 0, "asc" ]] // Indicar que se desea ordenar descendentemente la columna 1
+            });
+         
+
+
+
+
+            // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.
+            var table = $("#dataTables").DataTable();
+         
+            // // Aplicar las búsquedas por cada columna.
+            table.columns().every( function () {
+                var that = this;
+                
+                //En el tfooter se crearon los campos con th, se aplicada cada filtro a cada campo según su columna.
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            });
+
+
+    
+
+    // LLAMAR A CONSULTA AJAX
+    $('#boton-consultar').click(function(){
+
+        var datos = {};
+        
+        datos.id = $("#select2").val();
+        if( datos.id.length > 0){
+            //ESTA FUNCIÓN FUNCIONA... 
+            $.ajax({
+                data: datos,
+                url: "/bodega/api/pasillo/tarimas/",
+                type: 'GET',
+                dataType:'json',
+
+                success: function(result){
+                    
+                    var table = $("#dataTables").DataTable();
+                    table.clear();
+                    table.draw( false )
+                    
+
+                    for (  i = 0 ; i < result[0].tarimas.length; i++){
+                        table.row.add( [
+                            "<a class='btn btn-round btn-warning' href='/bodega/tarima/detail/"+result[0].tarimas[i].id+"/'><i class='icon-sign-blank'></i> "+ result[0].tarimas[i].id +"</a>",
+                            result[0].tarimas[i].sector,
+                            result[0].tarimas[i].contenido,
+                            result[0].tarimas[i].editado_por,
+                        ] ).draw( false );
+                    }
+
+                }
+            });
+        }else{
+            alertify.alert("Formulario incompleto, seleccione un pasillo.")
+        }
+        
+            return false;
+
+    });
+
+
+    
+
+    
+});
+
+    
+    </script> 
+{% endblock javascripts %}
+
