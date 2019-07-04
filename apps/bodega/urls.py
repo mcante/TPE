@@ -4,12 +4,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework import routers
 
 from .views import TarimaListView, TarimaUpdateView, TarimaDetailView, HistoricoInformeFormView, TarimaHistoricoRestList, \
-    PasilloRestList, PasilloInformeFormView
+    PasilloRestList, PasilloInformeFormView, TarimaRestList
 
 
 router = routers.SimpleRouter()
 router.register(r'historico/tarimas', TarimaHistoricoRestList)
 router.register(r'pasillo/tarimas', PasilloRestList)
+router.register(r'tarimas/list', TarimaRestList)
 
 urlpatterns = [
     

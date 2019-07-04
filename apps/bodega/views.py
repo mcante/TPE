@@ -7,17 +7,17 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import GroupRequiredMixin
 
-from .serializers import TarimaHistoricoSerializer, PasilloSerializer
+from .serializers import TarimaHistoricoSerializer, PasilloSerializer, TarimaRestSerializer
 from .models import Tarima, HistoricoTarima, Pasillo
-from .forms import TarimaForm, HistoricoForm, PasilloForm
-from .filters import HistoricoFilter, PasilloFilter
+from .forms import TarimaForm, HistoricoForm, PasilloForm, TarimaRestForm
+from .filters import HistoricoFilter, PasilloFilter, TarimaFilter
 
 from rest_framework import generics
 
 from rest_framework import viewsets
 
 # TARIMA
-class TarimaListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
+class TarimaListView2(GroupRequiredMixin, LoginRequiredMixin, ListView):
     group_required = [u"admin", u"Tecnicos"]
     model = Tarima
     template_name = 'bodega/tarima_list.html'
@@ -70,3 +70,14 @@ class PasilloInformeFormView(GroupRequiredMixin, LoginRequiredMixin, FormView):
     model = Pasillo
     form_class = PasilloForm
     template_name = 'bodega/pasillo_informe.html'
+
+class TarimaRestList(viewsets.ModelViewSet):
+    serializer_class = TarimaRestSerializer
+    queryset = Tarima.objects.all()
+    filter_class = TarimaFilter
+
+class TarimaListView(GroupRequiredMixin, LoginRequiredMixin, FormView):
+    group_required = [u"admin", u"Tecnicos", u"Bodega"]
+    model = Tarima
+    form_class = TarimaRestForm
+    template_name = 'bodega/tarima_list.html'

@@ -62,3 +62,32 @@ class PasilloForm(forms.Form):
         label='Pasillos',
         required=True,
         widget=forms.Select(attrs={'class': 'form-control', "id":"select2",}))
+
+
+class TarimaRestForm(forms.Form):
+    """Formulario que Controla los filtros para poder hacer busquedas
+    """
+    tarima = forms.ModelChoiceField(
+        queryset=Tarima.objects.all(),
+        label='Tarima',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control select2'}))
+
+    sector = forms.ModelChoiceField(
+        queryset=Sector.objects.all(),
+        label='Sector',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control select2'}))
+    
+    estado = forms.ModelChoiceField(
+        queryset=EstadoTarima.objects.all(),
+        label='Estado',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control select2'}))
+
+    """
+    contenido = forms.CharField(
+        label='Palabra clave',
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    """

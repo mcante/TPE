@@ -1,10 +1,15 @@
 {% extends "base/base_site.html" %}
 {% load static  %}
 
-{% block title %} TARIMAS {% endblock title %}
+{% block title %} LISTA DE TARIMAS {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
+
+  <!-- alertas personalizadas -->
+  <link href="{% static 'vendors/alertas/css/alertify.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/alertas/css/themes/default.css' %}" rel="stylesheet">
+
 <!-- Datatables -->
     <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
@@ -21,14 +26,27 @@
 
     
     <br />
-    
 
     <div class="row">
 
-      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-2 col-sm-4 col-xs-12">
+            <form method="GET" action="" class="form-horizontal form-label-left">
+                <table class="table table-striped table-hover table-condensed">
+                    {% csrf_token %}
+                    {{form.as_table}}	
+                </table>
+                <button id="boton-consultar" class="btn btn-round btn-info form-control">Generar Informe</button>
+            </form>
+        </div>
+
+
+      <div class="col-md-10 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-                <h1>Tarimas</h1>
+            
+            
+        
+
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -47,45 +65,11 @@
                             <th>Contenido</th>
                             <th>Estado</th>
                             <th>Acciones</th>
-                            
                         </tr>
                     </thead>
 
                     <tbody>
-                        {% if object_list %} <!-- Pregunta primero si hay objetos dentro de nuestro contexto -->
-                        {% for tarima in object_list %}
-                          
-                                <tr>
-                                    <td>
-                                        <a class='btn btn-round btn-warning' href="{% url 'tarima_detail' tarima.id %}"><i class='icon-sign-blank'></i> {{tarima.id}} </a>
-                                    </td>
-                                    <td>
-                                        {% if tarima.sector %}
-                                            {{tarima.sector}}
-                                        {% else %}
-                                            ---
-                                        {% endif %}
-                                    </td>
-                                    <td>{{tarima.contenido|linebreaksbr}}</td>  
-                                    <td>
-                                        {% if tarima.estado %}
-                                            {{tarima.estado}}
-                                        {% else %}
-                                            ---
-                                        {% endif %}
-                                    
-                                    </td>                                  
-                                    <td>
-                                        <a class="btn btn-xs btn-success" href="">QR</a>
-                                        <a class="btn btn-xs btn-primary" href="{% url 'tarima_update' tarima.id %}">Actualizar</a>
-                                        <a class="btn btn-xs btn-info" href="{% url 'tarima_detail' tarima.id %}">Histórico</a>
-                                    </td> 
-                                </tr>
-                            
-                        {% endfor %}
-                        {% else %}
-                        <h1>No hay registros de tarimas</h1>
-                        {% endif %}	
+                        
                     </tbody>
                     <tfoot>
                       <th><input type="text" placeholder="Buscar"/></th>
@@ -105,6 +89,17 @@
 
 {% block javascripts %}
   {{ block.super}}
+  <!-- DateJS -->
+<script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+<!-- bootstrap-moment -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+
+<!-- alertas personalizadas -->
+<script src="{% static 'vendors/alertas/alertify.js' %}"></script>
+
+<!-- Mis Scripts -->
+<script src="{% static 'build/mis_scripts.js' %}"></script> 
 
 <!-- Datatables -->
     <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
@@ -125,6 +120,9 @@
 
     <script>
     $(document).ready(function() {
+
+        init_datapicker();
+        init_select2();
 
         //Función de DataTable para establecer sus parámetros
         $("#dataTables").DataTable({
@@ -177,9 +175,13 @@
                 paging: true,
                 pagingType: "full_numbers",
                 "pageLength": 25,
-                "order": [[ 0, "asc" ]] // Indicar que se desea ordenar descendentemente la columna 0
+                "order": [[ 0, "asc" ]] // Indicar que se desea ordenar descendentemente la columna 1
             });
          
+
+
+
+
             // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.
             var table = $("#dataTables").DataTable();
          
@@ -197,7 +199,60 @@
                 } );
             });
 
+
+    
+
+    // LLAMAR A CONSULTA AJAX
+    $('#boton-consultar').click(function(){
+
+        var datos = {};
+        
+        datos.id = $("#id_tarima").val();
+        datos.sector = $("#id_sector").val();
+        datos.estado = $("#id_estado").val();
+
+            //ESTA FUNCIÓN FUNCIONA... 
+            $.ajax({
+                data: datos,
+                url: "/bodega/api/tarimas/list/",
+                type: 'GET',
+                dataType:'json',
+
+                success: function(result){
+
+                    var table = $("#dataTables").DataTable();
+                    table.clear();
+
+                    for (  i = 0 ; i < result.length; i++){
+                        table.row.add( [
+                            "<a class='btn btn-round btn-warning' href='/bodega/tarima/detail/"+result[i].id+"/'><i class='icon-sign-blank'></i> "+ result[i].id +"</a>",
+                            result[i].sector,
+                            result[i].contenido,
+                            result[i].estado,
+                            "<a class='btn btn-xs btn-success' href='#"+"/'><i class='icon-sign-blank'></i> "+ "QR" +"</a>" +
+                            "<a class='btn btn-xs btn-primary' href='/bodega/tarima/update/"+result[i].id+"/'><i class='icon-sign-blank'></i> Actualizar </a>" +
+                            "<a class='btn btn-xs btn-info' href='/bodega/tarima/detail/"+result[i].id+"/'><i class='icon-sign-blank'></i> Histórico </a>",
+                        ] ).draw( false );
+                    }
+                }
+            });
+        
+            return false;
+
+        /*
+        }else{
+            alertify.alert("FORMULARIO INCOMPLETO", "Se requieren los campos de fecha inicial y fecha final.");
+        }
+        */
     });
+
+
+    
+
+    
+});
+
+    
     </script> 
 {% endblock javascripts %}
 

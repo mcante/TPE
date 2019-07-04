@@ -25,3 +25,10 @@ class PasilloFilter(filters.FilterSet):
     class Meta:
         model = Pasillo
         fields = ['id']
+
+
+class TarimaFilter(filters.FilterSet):
+    
+    class Meta:
+        model = Tarima
+        fields = ['id', 'sector', 'estado']

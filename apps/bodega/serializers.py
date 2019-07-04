@@ -30,4 +30,12 @@ class PasilloSerializer(serializers.ModelSerializer):
         model = Pasillo
         #fields = '__all__'
         fields = ('id', 'tarimas')
-        
+
+
+class TarimaRestSerializer(serializers.ModelSerializer):
+    sector = serializers.StringRelatedField()
+    estado = serializers.StringRelatedField()
+
+    class Meta:
+        model = Tarima
+        fields = ('id', 'sector', 'contenido', 'estado')
