@@ -56,7 +56,9 @@
                         {% for tarima in object_list %}
                           
                                 <tr>
-                                    <td>{{tarima.id}}</td>
+                                    <td>
+                                        <a class='btn btn-round btn-warning' href="{% url 'tarima_detail' tarima.id %}"><i class='icon-sign-blank'></i> {{tarima.id}} </a>
+                                    </td>
                                     <td>
                                         {% if tarima.sector %}
                                             {{tarima.sector}}
