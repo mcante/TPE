@@ -23,7 +23,7 @@ class HistoricoForm(forms.Form):
         queryset=Tarima.objects.all(),
         label='Tarima',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control select2'}))
+        widget=forms.Select(attrs={'class': 'form-control', "id":"select2",}))
     
     fecha_min = forms.CharField(
         label='Fecha (inicial)',
@@ -38,13 +38,13 @@ class HistoricoForm(forms.Form):
         queryset=Sector.objects.all(),
         label='Sector',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control select2'}))
+        widget=forms.Select(attrs={'class': 'form-control', "id":"select2_1",}))
     
     estado = forms.ModelChoiceField(
         queryset=EstadoTarima.objects.all(),
         label='Estado',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control select2'}))
+        widget=forms.Select(attrs={'class': 'form-control', "id":"select2_2",}))
 
     """
     contenido = forms.CharField(
@@ -71,19 +71,19 @@ class TarimaRestForm(forms.Form):
         queryset=Tarima.objects.all(),
         label='Tarima',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control select2'}))
+        widget=forms.Select(attrs={'class': 'form-control', "id":"select2",}))
 
     sector = forms.ModelChoiceField(
         queryset=Sector.objects.all(),
         label='Sector',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control select2'}))
+        widget=forms.Select(attrs={'class': 'form-control', "id":"select2_1",}))
     
     estado = forms.ModelChoiceField(
         queryset=EstadoTarima.objects.all(),
         label='Estado',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control select2'}))
+        widget=forms.Select(attrs={'class': 'form-control', "id":"select2_2",}))
 
     """
     contenido = forms.CharField(
