@@ -13,6 +13,7 @@
     <h1><a href="{% url 'tarima_update' object.id %}" > <span class="label label-danger"> ACTUALIZAR TARIMA #{{ object.id }} </span> </a></h1>
     
         <a class="btn btn-round btn-warning" href="{% url 'tarima_list' %}"><i class="fa fa-reply"></i> Listar Tarimas</a>
+        <a class='btn btn-round btn-success' href='/bodega/tarima/qrs/?id={{ object.id }}/' target='_blank'><i class='icon-sign-blank'></i> Ver QR</a>
     
     <!-- /top tiles -->
 

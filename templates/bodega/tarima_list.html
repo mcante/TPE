@@ -229,7 +229,7 @@
                             result[i].sector,
                             result[i].contenido,
                             result[i].estado,
-                            "<a class='btn btn-xs btn-success' href='#"+"/'><i class='icon-sign-blank'></i> "+ "QR" +"</a>" +
+                            "<a class='btn btn-xs btn-success' href='/bodega/tarima/qrs/?id="+result[i].id+"/' target='_blank'><i class='icon-sign-blank'></i> "+ "QR" +"</a>" +
                             "<a class='btn btn-xs btn-primary' href='/bodega/tarima/update/"+result[i].id+"/'><i class='icon-sign-blank'></i> Actualizar </a>" +
                             "<a class='btn btn-xs btn-info' href='/bodega/tarima/detail/"+result[i].id+"/'><i class='icon-sign-blank'></i> Histórico </a>",
                         ] ).draw( false );

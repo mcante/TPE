@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
-from django.views.generic import ListView, CreateView, UpdateView, DetailView, FormView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, FormView, TemplateView, View
 from django.urls import reverse_lazy, reverse
+from django.http import HttpResponse
 import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,6 +16,8 @@ from .filters import HistoricoFilter, PasilloFilter, TarimaFilter
 from rest_framework import generics
 
 from rest_framework import viewsets
+
+import requests
 
 # TARIMA
 class TarimaListView2(GroupRequiredMixin, LoginRequiredMixin, ListView):
@@ -81,3 +84,39 @@ class TarimaListView(GroupRequiredMixin, LoginRequiredMixin, FormView):
     model = Tarima
     form_class = TarimaRestForm
     template_name = 'bodega/tarima_list.html'
+
+
+class TarimaQrListView(GroupRequiredMixin, LoginRequiredMixin, TemplateView):
+    group_required = [u"admin", u"Tecnicos", u"Bodega"]
+    template_name = 'bodega/tarima_qr_list.html'
+
+    def ConsultaQrRest(self):
+        url = 'https://suni.funsepa.org/i/api/tarima/138/'
+        response = requests.get(url)
+
+        if response.status == 200:
+            print (response.content)
+
+        
+        return True
+
+
+class ConsultaQrRest(GroupRequiredMixin, LoginRequiredMixin, View):
+    group_required = [u"admin", u"Tecnicos", u"Bodega"]
+    
+    def get(self, request):
+
+        # Obtener el numero de tarima que viene en la URL
+        idTarima = request.GET['id']
+        
+        # Consultar Rest del suni enviándole el número de tarima.
+        response = requests.get('https://suni.funsepa.org/i/api/tarima/'+ idTarima +'/?format=json')
+        qrtarima = response.json() # Serializar respuesta Rest a Json
+
+        # Devolver los elementos del Rest-SUNI
+        return render(request, 'bodega/tarima_qr_list.html', {
+            'qrs_util':qrtarima['dispositivos'],
+            'qrs_util_cantidad':qrtarima['cantidad_dispositivos'],
+            'qrs_repuesto':qrtarima['repuestos'],
+            'qrs_repuesto_cantidad':qrtarima['cantidad_repuestos']
+            })

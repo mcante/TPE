@@ -21,6 +21,7 @@
   <h1>
       {% if object.id %}
       <h1><a href="{% url 'tarima_detail' object.id %}" > <span class="label label-danger"> Ir a histórico de Tarima #{{ object.id }} </span> </a></h1>
+      <a class='btn btn-round btn-success' href='/bodega/tarima/qrs/?id={{ object.id }}/' target='_blank'><i class='icon-sign-blank'></i> Ver QR</a>
       {% endif %}
   </h1>
   <!-- /top tiles -->

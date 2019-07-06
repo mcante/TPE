@@ -4,7 +4,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework import routers
 
 from .views import TarimaListView, TarimaUpdateView, TarimaDetailView, HistoricoInformeFormView, TarimaHistoricoRestList, \
-    PasilloRestList, PasilloInformeFormView, TarimaRestList
+    PasilloRestList, PasilloInformeFormView, TarimaRestList, \
+    ConsultaQrRest
 
 
 router = routers.SimpleRouter()
@@ -25,5 +26,9 @@ urlpatterns = [
 
     # PASILLOS
     path('pasillo/informe/', PasilloInformeFormView.as_view(), name='pasillo_informe'),
+
+    # DESDE SUNI
+    path('tarima/qrs/', ConsultaQrRest.as_view(), name='tarima_qr_list'),
+
 
 ]
