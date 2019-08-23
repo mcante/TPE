@@ -1,0 +1,322 @@
+{% extends "base/base_site.html" %}
+{% load static  %}
+
+{% block title %} MAQUINARIA {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="{% static 'vendors/alertas/css/alertify.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/alertas/css/themes/default.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <h1><span class="label label-danger"> HISTÓRICO DE MAQUINARIA </span></h1>
+    
+        <a class="btn btn-round btn-warning" href="{% url 'maquinaria_list' %}"><i class="fa fa-reply"></i> Listar maquinas</a>
+        <a class='btn btn-round btn-success' href="{% url 'reprogramar_servicio_update' object.id %}"><i class="fa fa-pencil-square-o"></i> Programar Próxima Servicio </a>
+        
+    <!-- /top tiles -->
+    
+<br />    
+    
+
+{# PEDIDO #}
+<div class="row">
+    <div class="col-md-4 col-sm-4 col-xs-6">
+        <div class="x_panel">
+            
+            <div class="row">
+                <div class="col-sm-10">
+                    <table class="table nowrap table-striped table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Maquinaria:</strong></td>
+                                <td>{{ object.maquina }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Servicio programado:</strong></td>
+                                <td><h2><span class="label label-danger"> {{ object.servicio_programado }} </span></h2> </td>
+                                
+                            </tr>
+                            <tr>
+                                <td><strong>Encargado:</strong></td>
+                                <td>{{ object.encargado }} </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Observaciones:</strong></td>
+                                <td>{{ object.observaciones }} </td>
+                            </tr>
+                                                        
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+    
+    {% if user.is_superuser or request.user.groups.all.0.name == 'Bodega' or request.user.groups.all.1.name == 'Bodega' %}                          
+    <div class="col-md-4 col-sm-4 col-xs-6">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><a class="collapse-link"><i class="fa fa-plus-circle"></i> Agregar Trabajo Realizado </a><small>...</small></h2>
+                
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content" style="display: none;">
+                <br />
+                
+                <!-- Aquí se puede agregar contenido para que aparezca en la ventanita -->
+                <form action="{% url 'maquinaria_historico_add' %}" method="post">
+                    <table class="table nowrap" id="cualquiera">
+                        {% csrf_token %}
+                        {{historico_form.as_table}}	
+                    </table>
+                    <button type="submit" class="btn btn-round btn-primary">Agregar</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+    
+    {% endif %}
+
+    
+</div>
+
+
+{# FORMULARIO PARA AGREGAR NUEVO DETALLE / ESTE FORMULARIO SE OCULTA #}
+
+
+{# DETALLE #}
+
+<div class="row">
+    <hr>
+ 
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="box-header with-border">
+                <h2><span class="label label-success"> Registro de Histórico </span></h2>
+            </div>
+            
+            <div id="collapse1" class="box-body table-responsive">
+                <table class="table display table-striped table-hover table-condensed" id="dataTables">
+                    <thead>
+                        <tr>
+                            <th>Empresa</th>
+                            <th>Fecha</th>
+                            <th>Trabajo Realizado</th>
+                            <th>Costo</th>
+                            <th>Descripción</th>
+                            <th>Recomendaciones</th>
+                            <th>Supervisador Por</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registro in object.relMaquinaHistoricoMaquinaPerfil.all %}
+                        <tr>
+                            <td>{{ registro.empresa }}</td>
+                            <td>{{ registro.fecha|date:"Y-m-d" }}</td>
+                            <td>{{ registro.trabajo_realizado }}</td>
+                            <td>{{ registro.costo }}</td>
+                            <td>{{ registro.descripcion|linebreaks }}</td>
+                            <td>{{ registro.recomendaciones|linebreaks }}</td>
+                            <td>{{ registro.tecnico_supervisor.get_full_name }}</td>
+                            <td><a class='btn btn-round btn-primary' href="{% url 'actualizar_info_servicio_update' registro.id %}"> Actualizar Información</a></td>
+                            
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                    <tfoot>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Buscar"/></th>
+                        <th><input type="text" placeholder="Acciones"/></th>
+                      </tfoot>
+                </table>
+            </div>
+        </div> 
+    </div>
+     
+</div>
+
+
+
+
+</div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+  <!-- Skycons -->
+  <script src="{% static 'vendors/skycons/skycons.js' %}"></script>
+
+  <!-- ECharts -->
+  <script src="{% static 'vendors/echarts/dist/echarts.min.js' %}"></script>
+  <script src="{% static 'vendors/echarts/map/js/world.js' %}"></script>
+
+  <!-- DateJS -->
+  <script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+
+  <!-- Datatables -->
+  <script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+  <script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+  <script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+  <script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+  <!-- Mis Scripts -->
+    <script src="{% static 'build/mis_scripts.js' %}"></script>
+
+    <!-- alertas personalizadas -->
+    <script src="{% static 'vendors/alertas/alertify.js' %}"></script>
+
+  <script>
+  $(document).ready(function() {
+
+    init_select2();
+    init_datapicker();
+
+      //Función de DataTable para establecer sus parámetros
+      $("#dataTables").DataTable({
+        dom: "Blfrtip",
+              buttons: [{
+                  extend: "copy",
+                  className: "btn-primary"
+              }, {
+                  extend: "csv",
+                  className: "btn-success"
+              }, {
+                  extend: "excel",
+                  className: "btn-primary"
+              }, {
+                  extend: "pdfHtml5",
+                  className: "btn-primary"
+              }, {
+                  extend: "print",
+                  className: "btn-primary"
+              }, ],
+              //Cambiar el idioma, también se puede hacer con un json
+              language: {
+                          
+                  "sProcessing":     "Procesando...",
+                  "sLengthMenu":     "Mostrar _MENU_ registros",
+                  "sZeroRecords":    "No se encontraron resultados",
+                  "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                  "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                  "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                  "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                  "sInfoPostFix":    "",
+                  "sSearch":         "Buscar:",
+                  "sUrl":            "",
+                  "sInfoThousands":  ",",
+                  "sLoadingRecords": "Cargando...",
+                  "lengthChange": false,
+                  "oPaginate": {
+                      "sFirst":    "Primero",
+                      "sLast":     "Último",
+                      "sNext":     "Siguiente",
+                      "sPrevious": "Anterior"
+                  },
+                  "oAria": {
+                      "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                  }
+              },
+              paging: true,
+              pagingType: "full_numbers",
+              "pageLength": 25,
+              "order": [[ 1, "desc" ]] // Indicar que se desea ordenar descendentemente la columna 0
+          });
+       
+          // // Crear una variable de tipo dataTables, es decir del DIV de la tabla para poderla manipular.
+          var table = $("#dataTables").DataTable();
+       
+          // // Aplicar las búsquedas por cada columna.
+          table.columns().every( function () {
+              var that = this;
+              
+              //En el tfooter se crearon los campos con th, se aplicada cada filtro a cada campo según su columna.
+              $( 'input', this.footer() ).on( 'keyup change', function () {
+                  if ( that.search() !== this.value ) {
+                      that
+                          .search( this.value )
+                          .draw();
+                  }
+              } );
+          });
+
+  });
+  
+</script> 
+
+
+<script>
+        // VALIDACIÓN DEL FORMULARIO
+          function validacion() {
+
+            var cantidad = parseInt(document.getElementById('id_cantidad2').value, 10);
+            var tipoform = $("#select2_3 option:selected").text();
+                        
+              var estado = false;
+             
+              if(cantidad > 0){
+                  
+                    "{% for pendiente in Existencia %}"
+                    
+                        var pendientes = parseInt("{{ pendiente.total }}", 10);    
+                        var tipo = "{{ pendiente.dispositivo__dispositivo }}";
+
+                        if(tipoform == tipo){
+                            if(cantidad > pendientes){
+                                alertify.success("Imposible despachar " + cantidad + " triage de {{pendiente.dispositivo__dispositivo}}, únicamente hay " + pendientes + " por entregar."); 
+                                estado = false;
+                                return estado;
+                            }else{
+                                estado = true;
+                                return estado;
+                            }
+                        }else{
+                            estado = false;
+                        }
+                            
+                    "{% endfor %}"
+              }
+ 
+              
+          return estado;
+        
+          };
+        </script>
+
+
+
+{% endblock javascripts %}

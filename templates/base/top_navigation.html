@@ -27,6 +27,7 @@
 
 
       <!-- Alarmas de Tareas -->
+      {% if PorHacer.count > 0 %}
       <li role="presentation" class="dropdown">
         <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
           <i class="fa fa-check"></i>
@@ -70,6 +71,7 @@
 
         </ul>
       </li>
+      {% endif %}
       <!-- FIN - Alarmas de Tareas -->
 
 
@@ -77,6 +79,7 @@
 
       
       <!-- Alarmas de Notas -->
+      {% if Notas.count > 0 %}
       <li role="presentation" class="dropdown">
         <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
           <i class="fa fa-list"></i>
@@ -122,10 +125,12 @@
 
         </ul>
       </li>
+      {% endif %}
       <!-- FIN - Alarmas de Notas -->
 
 
       <!-- Alarmas de Mejoras -->
+      {% if Mejoras.count > 0 %}
       <li role="presentation" class="dropdown">
           <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-stethoscope"></i>
@@ -162,7 +167,50 @@
   
           </ul>
         </li>
+        {% endif %}
         <!-- FIN - Alarmas de Mejoras -->
+
+
+        <!-- Alarmas de Servicios -->
+      {% if Servicios.count > 0 %}
+      <li role="presentation" class="dropdown">
+          <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-cogs"></i>
+            <span class="badge bg-green">{{ Servicios.count }}</span>
+          </a>
+          
+          <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+  
+            {% for servicio in Servicios %}
+            <li>
+              <a href="{% url 'maquinaria_detail' servicio.id %}">
+                <span class="image"><i class="fa fa-check"></i></span>
+                <span>
+                  <span class="count blue">{{ servicio.maquina }} </span>
+                  <br>
+                  <span class="time red">{{ servicio.servicio_programado }}</span>
+                </span>
+                <br>
+                <span class="message">
+                  {{ servicio.observaciones }}
+                </span>
+              </a>
+            </li>
+            {% endfor %}
+  
+            <li>
+              <div class="text-center">
+                <a href="{% url 'maquinaria_list' %}">
+                  <strong>Ver todo</strong>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+              </div>
+            </li>
+  
+          </ul>
+        </li>
+        {% endif %}
+        <!-- FIN - Alarmas de Servicios -->
 
 
     </ul>

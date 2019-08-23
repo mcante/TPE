@@ -100,12 +100,23 @@
                       <li><a href="{% url 'tarima_list' %}">Listado de Tarimas</a></li>
                       <li><a href="{% url 'pasillo_informe' %}">Buscador por Pasillo</a></li>
                       <li><a href="{% url 'tarima_informe' %}">Histórico de Tarimas</a></li>
+                      <li><a href="{% url 'maquinaria_list' %}">Maquinaria</a></li>
                   </ul>
                 </li>
             </ul>
+            
           </li>
-        
 
+          <li><a><i class="fa fa-server"></i> Bodeguita <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a>Control de Triage<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="{% url 'entrada_triage_list' %}">Entradas Triage</a></li>
+                    <li><a href="{% url 'triage_entregados_list' %}">Triage Entregados</a></li>
+                </ul>
+              </li>
+          </ul>
+          </li>
         
           <li><a><i class="fa fa-rocket"></i> Planificaciones <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">

@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from decimal import Decimal
 from django.contrib.auth.models import User
 
 from django.db.models import signals
@@ -148,3 +149,144 @@ def enviar_historico(sender, instance, **kwargs):
         
 
 
+
+# ******** CONTROL DE TRIAGE ********
+
+""" Dispositivo
+CPU, MONITOR, TECLADO, MOUSE, LAPTOP, TABLET, DISCO DURO
+"""
+class DispositivosTriage(models.Model):
+    dispositivo = models.CharField(max_length=100, null=False, blank=False)
+    identificador = models.CharField(max_length=15, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.dispositivo)
+
+""" Tipo de Entrada
+Donación, Compra, Renovación, Reingreso, Etc.
+"""
+class TiposEntrada(models.Model):
+    tipo = models.CharField(max_length=100, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.tipo)
+
+""" Estado de la Entrada
+Útil o Repuesto
+"""
+class InventarioEntrada(models.Model):
+    tipo = models.CharField(max_length=100, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.tipo)
+
+class ControlTriage(ControlCreaciones):
+    no_entrada = models.PositiveSmallIntegerField(null=False, unique=True)
+    fecha_entrada = models.DateField(default=datetime.datetime.now, null=True, blank=True)
+    ingresa_como = models.ForeignKey(TiposEntrada, on_delete=models.PROTECT, null=True, blank=True, related_name='relControlTriageTiposEntrada')
+    
+    completado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '{}'.format(self.no_entrada)
+    
+class RegistrarTriage(models.Model):
+    no_entrada = models.ForeignKey(ControlTriage, on_delete=models.PROTECT, null=True, blank=True, related_name='relRegistrarTriageControlTriage')
+    dispositivo = models.ForeignKey(DispositivosTriage, on_delete=models.PROTECT, null=True, blank=True, related_name='relRegistrarTriageDispositivosTriage')
+    cantidad = models.PositiveSmallIntegerField(null=False)
+    a_inventario_de = models.ForeignKey(InventarioEntrada, on_delete=models.PROTECT, null=True, blank=True, related_name='relRegistrarTriageInventarioEntrada')
+
+    creado_por = models.ForeignKey(User, related_name='relRegistrarTriageCreadoPor', on_delete=models.CASCADE, null=True, blank=True)
+    fecha_creacion = models.DateField(default=datetime.datetime.now, null=True, blank=True)
+
+    rando_inicia = models.PositiveSmallIntegerField(null=False)
+    rando_termina = models.PositiveSmallIntegerField(null=False)
+
+    def __str__(self):
+        return '{} - {}: {}'.format(self.no_entrada, self.dispositivo, self.cantidad)
+    
+
+
+class DespachoTriage(models.Model):
+    no_entrada = models.ForeignKey(ControlTriage, on_delete=models.PROTECT, null=True, blank=True, related_name='relDespachoTriageControlTriage')
+    dispositivo = models.ForeignKey(DispositivosTriage, on_delete=models.PROTECT, null=True, blank=True, related_name='relDespachoTriageDispositivosTriage')
+    cantidad = models.PositiveSmallIntegerField(null=False)
+    a_inventario_de = models.ForeignKey(InventarioEntrada, on_delete=models.PROTECT, null=True, blank=True, related_name='relDespachoTriageInventarioEntrada')
+
+    rando_inicia = models.PositiveSmallIntegerField(null=False)
+    rando_termina = models.PositiveSmallIntegerField(null=False)
+
+    fecha_entrega = models.DateField(default=datetime.datetime.now, null=True, blank=True)
+    entrega = models.ForeignKey(User, related_name='relDespachoTriageReimpresosEntrega', on_delete=models.CASCADE, null=True, blank=True)
+    recibe = models.ForeignKey(User, related_name='relDespachoTriageReimpresosRecibe', on_delete=models.CASCADE)
+    firma_digital = models.BooleanField(default=False, verbose_name='Confirmar de recibido')
+
+    def __str__(self):
+        return '{}'.format(self.no_entrada)
+
+
+
+class ControlTriageReimpresos(ControlCreaciones):
+    dispositivo = models.ForeignKey(DispositivosTriage, on_delete=models.PROTECT, null=True, blank=True, related_name='relControlTriageReimpresosDispositivosTriage')
+    autorizado_por = models.ForeignKey(User, related_name='relControlTriageReimpresosAutorizadoPor', on_delete=models.CASCADE)
+    motivo_reimpresion = models.TextField(verbose_name='Motivo de la Reimpresión', null=True, blank=True)
+    
+    fecha_reimpresion = models.DateField(default=datetime.datetime.now, null=True, blank=True)
+    triage = models.PositiveSmallIntegerField(null=False)    
+    
+    fecha_entrega = models.DateField(default=datetime.datetime.now, null=True, blank=True)
+    entrega = models.ForeignKey(User, related_name='relControlTriageReimpresosEntrega', on_delete=models.CASCADE, null=True, blank=True)
+    recibe = models.ForeignKey(User, related_name='relControlTriageReimpresosRecibe', on_delete=models.CASCADE)
+    firma_digital = models.BooleanField(default=False, verbose_name='Confirmar de recibido')
+
+    def __str__(self):
+        return '{}: {}'.format(self.dispositivo, str(self.dispositivo.identificador) + str(self.triage))
+
+
+
+
+# CONTROL DE MAQUINARIA
+
+class Empresa(models.Model):
+    empresa = models.CharField(max_length=150, null=True, blank=True)
+    contacto = models.CharField(max_length=150, null=True, blank=True)
+    telefono = models.CharField(max_length=15, null=True, blank=True)
+    celular = models.CharField(max_length=15, null=True, blank=True)
+
+    def __str__(self):
+        return '{}: {}'.format(self.empresa, self.contacto)
+
+class Maquina(models.Model):
+    tipo = models.CharField(max_length=150, null=True, blank=True)
+    descripcion = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return '{}'.format(self.tipo)
+
+class MaquinaPerfil(ControlCreaciones):
+    maquina = models.ForeignKey(Maquina, related_name='relMaquinaPerfilMaquina', on_delete=models.CASCADE)
+    servicio_programado = models.DateField(default=datetime.datetime.now, null=True, blank=True, verbose_name='Servicio Programado')
+    encargado = models.ForeignKey(User, related_name='relMaquinaPerfilEncargado', on_delete=models.CASCADE, null=True, blank=True)
+    observaciones = models.TextField(null=True, blank=True)
+    
+    def __str__(self):
+        return '{}'.format(self.maquina)
+
+class MaquinaProblema(models.Model):
+    problema = models.CharField(max_length=150, null=True, blank=True)
+
+    def __str__(self):
+        return '{}'.format(self.problema)
+
+class MaquinaHistorico(ControlCreaciones):
+    maquina = models.ForeignKey(MaquinaPerfil, related_name='relMaquinaHistoricoMaquinaPerfil', on_delete=models.CASCADE, null=True, blank=True)
+    empresa = models.ForeignKey(Empresa, related_name='relMaquinaHistoricoEmpresa', on_delete=models.CASCADE)
+    fecha = models.DateField(default=datetime.datetime.now, null=True, blank=True)
+    trabajo_realizado = models.ForeignKey(MaquinaProblema, related_name='relMaquinaHistoricoEmpresa', on_delete=models.CASCADE)
+    costo = models.DecimalField(max_digits=6, decimal_places=2, null = True, blank = True, default=Decimal('0.00'))
+    descripcion = models.TextField(null=True, blank=True)
+    recomendaciones = models.TextField(null=True, blank=True)
+    tecnico_supervisor = models.ForeignKey(User, related_name='relMaquinaHistoricoTecnicoSupervisor', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return '{}: {}'.format(self.empresa, self.trabajo_realizado)
