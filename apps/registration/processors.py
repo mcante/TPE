@@ -10,7 +10,7 @@ import datetime
 def alarma(request):
 
     fecha_inicial = '{:%Y-%m-%d}'.format(datetime.datetime.now())
-    fecha_final = '{:%Y-%m-%d}'.format(datetime.datetime.now() + datetime.timedelta(days=5))
+    fecha_final = '{:%Y-%m-%d}'.format(datetime.datetime.now() + datetime.timedelta(days=28))
 
     if request.user.is_authenticated: # Validar si hay usuario autenticado para hacer las consultas y evitar generar errores, sino hay entonces que retorne una lista vacía.
         notas_seguimiento = Nota.objects.filter(creado_por=request.user.id, necesita_seguimiento=True).order_by('id').reverse()  # Obtener todas las notas que necesitan seguimiento según el usuario logueado
