@@ -20,7 +20,7 @@ urlpatterns = [
     # EQUIPAMIENTO
     path('tarima/list/', TarimaListView.as_view(), name='tarima_list'),
     #path('equipamiento/add/', EquipamientoCreateView.as_view(), name='equipamiento_add'),
-    
+    path('tarima/update/<int:pk>/', TarimaUpdateView.as_view(), name='tarima_update'),
     path('tarima/detail/<int:pk>/', TarimaDetailView.as_view(), name='tarima_detail'),
     path('tarima/informe/', HistoricoInformeFormView.as_view(), name='tarima_informe'),
 
